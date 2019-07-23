@@ -33,8 +33,9 @@ var init = function (window) {
 
     // TODO 2 : add background
     
-             var background = opspark.makeBackground(app,ground);
+            var background = opspark.makeBackground(app,ground);
             view.addChild(background);
+            
 
     
     var help = draw.textfield('MOVES || up: jump | right: flying jump | down: duck | space: fire | q your mom!', 
@@ -81,7 +82,8 @@ var init = function (window) {
 
 
     // TODO 6 : create game manager
-
+            var game = opspark.createGameManager(app,hud);
+            opspark.runLevelInGame(game);
 
 };
 

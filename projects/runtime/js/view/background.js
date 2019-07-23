@@ -5,7 +5,10 @@ var background = function (window) {
     var draw = window.opspark.draw;
     var createjs = window.createjs;
     var tree;
+    var sTree;;
+    var sTree2;
     var buildings = [];
+    
     
     /*
      * Create a background view for our game application
@@ -24,7 +27,7 @@ var background = function (window) {
         // ANIMATION VARIABLES HERE:
         
         
-        // add objects for display inb ackground
+        // add objects for display in background
         // called at the start of game and whenever the page is resized
         function render() {
             // useful variables
@@ -40,7 +43,7 @@ var background = function (window) {
             var backgroundFill = draw.rect(canvasWidth,groundY,'purple');
             background.addChild(backgroundFill);
             
-            // TODO: 3 - Add a moon and starfield
+            // TODO: 3 - Add a moon and starfield   
             
                 
                 var circle;
@@ -58,23 +61,38 @@ var background = function (window) {
                  background.addChild(moon);
             
             // TODO: 5 - Add buildings!     Q: This is before TODO 4 for a reason! Why?
-                    var buildingHeight = 300;
-                    var building;
-                        for(var i=0;i<5;++i) {
-                         building = draw.rect(75,buildingHeight,'LightGray','Black',1);
-                         building.x = 200*i;
-                        building.y = groundY-buildingHeight;
-                        background.addChild(building);
-                        buildings.push(building);
-                    }
-            
+                    //var buildingHeight = 300;
+                   // var building;
+                   // var buildingColors = ["Black", "LightGray", "Blue", "Black", "LightBlue"]
+                   // var buildingHeightDifferent = [175, 195, 130, 175, 150]
+                   // for (var i = 0; i < 5; ++i) {
+                  //       building = draw.rect(75,buildingHeightDifferent[i],buildingColors[i],'Black',1);
+                   //      building.x = 150*i;
+                  //      building.y = groundY-buildingHeightDifferent[i];
+                  //      background.addChild(building);
+                  //      buildings.push(building);
+                  //  }
+                  
+                    
             // TODO 4: Part 1 - Add a tree
-                tree = draw.bitmap('img/tree.png');
-                tree.x = 175;
-                tree.y = 145;
-                background.addChild(tree);
+                //tree = draw.bitmap('img/tree.png');
+                //tree.x = 175;
+                //tree.y = groundY - 250;
+                //background.addChild(tree);
                 
-            
+            sTree = draw.bitmap('img/silhouettetree.png');
+                sTree.x = 1500;
+                sTree.y = groundY - 400;
+                sTree.scaleX = .5;
+                sTree.scaleY = .5;
+                background.addChild(sTree);
+                
+            sTree2 = draw.bitmap('img/silhouettetree.png');
+                sTree2.x = 175;
+                sTree2.y = groundY - 320;
+                sTree2.scaleX = .4;
+                sTree2.scaleY = .4;
+                background.addChild(sTree2);
         }
         
         // Perform background animation
@@ -85,14 +103,36 @@ var background = function (window) {
             var canvasHeight = app.canvas.height;
             var groundY = ground.y;
             
+            
+            
             // TODO 4: Part 2 - Move the tree!
-                 tree.x = tree.x - 1;
-                 if(tree.x < -200) {
-                     tree.x = canvasWidth;
+                // tree.x = tree.x - 3;
+                // if(tree.x < -200) {
+                //     tree.x = canvasWidth;
+                // }
+                
+                 sTree.x = sTree.x - 2;
+                if(sTree.x < -500) {
+                     sTree.x = canvasWidth;
                  }
-            
+                 
+                 sTree2.x = sTree2.x - 1;
+                if(sTree2.x < -500) {
+                     sTree2.x = canvasWidth;
+                 }
+                
             // TODO 5: Part 2 - Parallax
-            
+                
+                
+              
+            //for (var i = 0; i < buildings.length; i++) {
+            //    var building = buildings[i];
+            //    building.x = building.x - 1;
+            //    if(building.x < -200) {
+            //        building.x = canvasWidth;
+            //    }
+            //}
+
 
         }
 
