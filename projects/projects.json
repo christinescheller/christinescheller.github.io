@@ -2,7 +2,7 @@
     "projects": [
         { "name": "platformer", "title": "Platformer", "description": "A cannon - dodging, collectible - grabbing adventure game for Halleb0t", "date": "Wednesday, July 17, 2019" }, 
         { "name": "bouncing-box", "title": "Bouncing Box", "description": "A project that gives you a taste of game development on the web ", "date": "Wednesday, July 17, 2019" },
-        { "name": "circularity", "title": "Circularity", "description": "A project about iteration and Arrays", "date": "Wednesday, July 17, 2019" }
+        { "name": "circularity", "title": "Circularity", "description": "A project about iteration and Arrays", "date": "Wednesday, July 17, 2019" },
         { "name": "runtime", "title": "Runtime", "description": "A Sidescrolling game featuring Halleb0t", "date": "Wednesday, July 17, 2019" }
     ] 
     
