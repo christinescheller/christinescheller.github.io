@@ -5,8 +5,11 @@ var background = function (window) {
     var draw = window.opspark.draw;
     var createjs = window.createjs;
     var tree;
-    var sTree;;
+    var sTree;
     var sTree2;
+    var sTree3;
+    var falcon;
+    var tardis;
     var buildings = [];
     
     
@@ -79,7 +82,15 @@ var background = function (window) {
                 //tree.x = 175;
                 //tree.y = groundY - 250;
                 //background.addChild(tree);
-                
+            
+            //millenium falcon      
+        falcon = draw.bitmap('img/falcon.png');
+                falcon.x = 2500;
+                falcon.y = groundY - 320;
+                falcon.scaleX = .4;
+                falcon.scaleY = .4;
+                background.addChild(falcon);
+            
             sTree = draw.bitmap('img/silhouettetree.png');
                 sTree.x = 1500;
                 sTree.y = groundY - 400;
@@ -88,11 +99,26 @@ var background = function (window) {
                 background.addChild(sTree);
                 
             sTree2 = draw.bitmap('img/silhouettetree.png');
-                sTree2.x = 175;
+                sTree2.x = 800;
                 sTree2.y = groundY - 320;
                 sTree2.scaleX = .4;
                 sTree2.scaleY = .4;
                 background.addChild(sTree2);
+        
+        sTree3 = draw.bitmap('img/treesil2.png');
+                sTree3.x = 2000;
+                sTree3.y = groundY - 233;
+                sTree3.scaleX = .12;
+                sTree3.scaleY = .12;
+                background.addChild(sTree3);
+        
+        tardis = draw.bitmap('img/tardis.png');
+                tardis.x = 3200;
+                tardis.y = groundY - 255;
+                tardis.scaleX = 1;
+                tardis.scaleY = 1;
+                background.addChild(tardis);
+        
         }
         
         // Perform background animation
@@ -120,7 +146,20 @@ var background = function (window) {
                 if(sTree2.x < -500) {
                      sTree2.x = canvasWidth;
                  }
+                 
+                 sTree3.x = sTree3.x - 1;
+                if(sTree3.x < -500) {
+                     sTree3.x = canvasWidth;
+                 }
                 
+                // millenium falcon
+                falcon.x = falcon.x - 4;
+                
+                //tardis
+                
+                tardis.x = tardis.x - 1.5
+               
+                 
             // TODO 5: Part 2 - Parallax
                 
                 

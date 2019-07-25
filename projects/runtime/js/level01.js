@@ -29,11 +29,12 @@ var level01 = function (window) {
                 {type: 'reward', x:1800, y:groundY-120},
                 {type: 'reward', x:6400, y:groundY-120},
                 {type: 'reward', x:8600, y:groundY-120},
+                
             ]
         };
         window.levelData = levelData;
         // set this to true or false depending on if you want to see hitzones
-        game.setDebugMode(false);
+        game.setDebugMode(true);
 
         // BEGIN EDITING YOUR CODE HERE
       
@@ -68,7 +69,7 @@ var level01 = function (window) {
      //additional obstacle
                 
         function createSpikes(x,y) {
-            var hitZoneSize = 25;
+            var hitZoneSize = 23;
             var damageFromObstacle = 20;
             var myObstacle = game.createObstacle(hitZoneSize, damageFromObstacle);
                 myObstacle.x = x;
@@ -78,8 +79,8 @@ var level01 = function (window) {
                 
             var obstacleImage = draw.bitmap('img/spikes.png');
                 myObstacle.addChild(obstacleImage);
-                obstacleImage.x = -25;
-                obstacleImage.y = -25;
+                obstacleImage.x = -24;
+                obstacleImage.y = -24;
         }
                 
             createSpikes(800, groundY - 30);
@@ -95,11 +96,11 @@ var level01 = function (window) {
                 enemy.y = y;
                 enemy.velocityX = -1.5;
                 
-            var redSquare = draw.bitmap('img/ghost.png');
-                redSquare.x = -39;
-                redSquare.y = -40;
+            var ghost = draw.bitmap('img/ghost.png');
+                ghost.x = -39;
+                ghost.y = -40;
                 
-            enemy.addChild(redSquare);
+            enemy.addChild(ghost);
                 
             game.addGameItem(enemy);
             
@@ -145,7 +146,7 @@ var level01 = function (window) {
             createReward(2500, groundY - 100);
             createReward(3000, groundY - 100);
             createReward(3600, groundY - 100);
-        
+    
     };
 };
 
