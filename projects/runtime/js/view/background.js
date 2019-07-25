@@ -112,13 +112,7 @@ var background = function (window) {
                 sTree3.scaleY = .12;
                 background.addChild(sTree3);
         
-        tardis = draw.bitmap('img/tardis.png');
-                tardis.x = 3200;
-                tardis.y = groundY - 255;
-                tardis.scaleX = 1;
-                tardis.scaleY = 1;
-                background.addChild(tardis);
-        
+       
         }
         
         // Perform background animation
@@ -155,9 +149,7 @@ var background = function (window) {
                 // millenium falcon
                 falcon.x = falcon.x - 4;
                 
-                //tardis
-                
-                tardis.x = tardis.x - 1.5
+              
                
                  
             // TODO 5: Part 2 - Parallax

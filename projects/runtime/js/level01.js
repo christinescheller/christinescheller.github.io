@@ -29,12 +29,12 @@ var level01 = function (window) {
                 {type: 'reward', x:1800, y:groundY-120},
                 {type: 'reward', x:6400, y:groundY-120},
                 {type: 'reward', x:8600, y:groundY-120},
-                
+                {type: 'tardis', x:8600, y:groundY-120},
             ]
         };
         window.levelData = levelData;
         // set this to true or false depending on if you want to see hitzones
-        game.setDebugMode(false);
+        game.setDebugMode(true);
 
         // BEGIN EDITING YOUR CODE HERE
       
@@ -146,7 +146,29 @@ var level01 = function (window) {
             createReward(2500, groundY - 100);
             createReward(3000, groundY - 100);
             createReward(3600, groundY - 100);
-    
+
+function createTardis (x,y) {
+            var hitZoneSize = 50;
+            var tardis = game.createGameItem('tardis', hitZoneSize);
+                tardis.x = x;
+                tardis.y = y + 50;
+                tardis.velocityX = -2;
+                
+            var blueSquare = draw.bitmap('img/tardis.png');
+                blueSquare.x = - 70;
+                blueSquare.y = - 175;
+                
+            tardis.addChild(blueSquare);
+            
+            game.addGameItem(tardis);
+            
+            tardis.onPlayerCollision = function() {
+                 game.changeIntegrity(+50);
+                tardis.fadeOut();
+            };
+        }
+        
+            createTardis(4500, groundY - 129);
     };
 };
 
