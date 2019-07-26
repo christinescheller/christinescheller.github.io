@@ -10,6 +10,7 @@ var background = function (window) {
     var sTree3;
     var falcon;
     var tardis;
+    var level2;
     var buildings = [];
     
     
@@ -84,13 +85,14 @@ var background = function (window) {
                 //background.addChild(tree);
             
             //millenium falcon      
-        falcon = draw.bitmap('img/falcon.png');
+            falcon = draw.bitmap('img/falcon.png');
                 falcon.x = 2500;
                 falcon.y = groundY - 320;
                 falcon.scaleX = .4;
                 falcon.scaleY = .4;
                 background.addChild(falcon);
-            
+                
+            //trees
             sTree = draw.bitmap('img/silhouettetree.png');
                 sTree.x = 1500;
                 sTree.y = groundY - 400;
@@ -105,12 +107,21 @@ var background = function (window) {
                 sTree2.scaleY = .4;
                 background.addChild(sTree2);
         
-        sTree3 = draw.bitmap('img/treesil2.png');
+             sTree3 = draw.bitmap('img/treesil2.png');
                 sTree3.x = 2000;
                 sTree3.y = groundY - 233;
                 sTree3.scaleX = .12;
                 sTree3.scaleY = .12;
                 background.addChild(sTree3);
+                
+            //Level 2
+            
+            level2 = draw.bitmap('img/level2.png');
+                level2.x = 5000;
+                level2.y = groundY - 233;
+                level2.scaleX = 2;
+                level2.scaleY = 2;
+                background.addChild(level2);
         
        
         }
@@ -149,8 +160,8 @@ var background = function (window) {
                 // millenium falcon
                 falcon.x = falcon.x - 4;
                 
-              
-               
+                //Level 2
+               level2.x = level2.x - 2.5;
                  
             // TODO 5: Part 2 - Parallax
                 
