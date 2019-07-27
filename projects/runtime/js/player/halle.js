@@ -204,7 +204,7 @@
         _bounds = _walk.getBounds();
             
         /*
-         * Handle the jump sequence specially because its height is grater 
+         * Handle the jump sequence specially because its height is greater 
          * than walking. The spritesheet assets need to be modified to fix this 
          * issue - they should not leave the same bounding box, and we can  
          * animate height programmatically.

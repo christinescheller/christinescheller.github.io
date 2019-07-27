@@ -11,6 +11,7 @@ var background = function (window) {
     var falcon;
     var tardis;
     var level2;
+    var enterprise;
     var buildings = [];
     
     
@@ -92,6 +93,14 @@ var background = function (window) {
                 falcon.scaleY = .4;
                 background.addChild(falcon);
                 
+            //enterprise     
+            enterprise = draw.bitmap('img/enterprise.png');
+                enterprise.x = 5000;
+                enterprise.y = groundY - 350;
+                enterprise.scaleX = 1;
+                enterprise.scaleY = 1;
+                background.addChild(enterprise);
+                
             //trees
             sTree = draw.bitmap('img/silhouettetree.png');
                 sTree.x = 1500;
@@ -162,6 +171,9 @@ var background = function (window) {
                 
                 //Level 2
                level2.x = level2.x - 2.5;
+               
+               //enterprise
+               enterprise.x = enterprise.x - 4;
                  
             // TODO 5: Part 2 - Parallax
                 
