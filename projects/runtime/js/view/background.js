@@ -65,27 +65,29 @@ var background = function (window) {
                  moon.scaleY = .5;
                  background.addChild(moon);
             
-            // TODO: 5 - Add buildings!     Q: This is before TODO 4 for a reason! Why?
-                    //var buildingHeight = 300;
-                   // var building;
-                   // var buildingColors = ["Black", "LightGray", "Blue", "Black", "LightBlue"]
-                   // var buildingHeightDifferent = [175, 195, 130, 175, 150]
-                   // for (var i = 0; i < 5; ++i) {
-                  //       building = draw.rect(75,buildingHeightDifferent[i],buildingColors[i],'Black',1);
-                   //      building.x = 150*i;
-                  //      building.y = groundY-buildingHeightDifferent[i];
-                  //      background.addChild(building);
-                  //      buildings.push(building);
-                  //  }
+            /* Did it but don't want it.
+            TODO: 5 - Add buildings!     Q: This is before TODO 4 for a reason! Why?
+                    var buildingHeight = 300;
+                    var building;
+                    var buildingColors = ["Black", "LightGray", "Blue", "Black", "LightBlue"]
+                    var buildingHeightDifferent = [175, 195, 130, 175, 150]
+                    for (var i = 0; i < 5; ++i) {
+                         building = draw.rect(75,buildingHeightDifferent[i],buildingColors[i],'Black',1);
+                         building.x = 150*i;
+                        building.y = groundY-buildingHeightDifferent[i];
+                        background.addChild(building);
+                        buildings.push(building);
+                 }
                   
                     
-            // TODO 4: Part 1 - Add a tree
-                //tree = draw.bitmap('img/tree.png');
-                //tree.x = 175;
-                //tree.y = groundY - 250;
-                //background.addChild(tree);
+             TODO 4: Part 1 - Add a tree
+                tree = draw.bitmap('img/tree.png');
+                tree.x = 175;
+                tree.y = groundY - 250;
+                background.addChild(tree);
+            */
             
-            //millenium falcon      
+//millenium falcon      
             falcon = draw.bitmap('img/falcon.png');
                 falcon.x = 2500;
                 falcon.y = groundY - 320;
@@ -93,7 +95,7 @@ var background = function (window) {
                 falcon.scaleY = .4;
                 background.addChild(falcon);
                 
-            //enterprise     
+//enterprise     
             enterprise = draw.bitmap('img/enterprise.png');
                 enterprise.x = 5000;
                 enterprise.y = groundY - 350;
@@ -101,7 +103,7 @@ var background = function (window) {
                 enterprise.scaleY = 1;
                 background.addChild(enterprise);
                 
-            //trees
+//trees
             sTree = draw.bitmap('img/silhouettetree.png');
                 sTree.x = 1500;
                 sTree.y = groundY - 400;
@@ -123,7 +125,7 @@ var background = function (window) {
                 sTree3.scaleY = .12;
                 background.addChild(sTree3);
                 
-            //Level 2
+//Level 2
             
             level2 = draw.bitmap('img/level2.png');
                 level2.x = 5000;
@@ -166,13 +168,13 @@ var background = function (window) {
                      sTree3.x = canvasWidth;
                  }
                 
-                // millenium falcon
+// millenium falcon
                 falcon.x = falcon.x - 4;
                 
-                //Level 2
+//Level 2
                level2.x = level2.x - 2.5;
                
-               //enterprise
+//enterprise
                enterprise.x = enterprise.x - 4;
                  
             // TODO 5: Part 2 - Parallax

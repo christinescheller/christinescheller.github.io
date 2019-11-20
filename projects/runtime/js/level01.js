@@ -96,7 +96,7 @@ var level01 = function (window) {
             createSpikes(3200, groundY - 18);
             createSpikes(3800, groundY - 18);
             
-            //level 2 spikes
+//level 2 spikes
             
             createSpikes(4800, groundY - 18);
             createSpikes(5400, groundY - 18);
@@ -105,7 +105,7 @@ var level01 = function (window) {
             createSpikes(6200, groundY - 18);
             createSpikes(6400, groundY - 18);
             
-//baddie
+//level 1 baddie
         function createEnemy (x,y) {
             var enemy =  game.createGameItem('enemy',30);
                 enemy.x = x;
@@ -135,7 +135,8 @@ var level01 = function (window) {
         createEnemy(600, groundY - 50);
         createEnemy(2000, groundY - 50);
         createEnemy(2700, groundY - 50);
-        
+
+//level 2 baddie        
 function createGhost2 (x,y) {
             var enemy =  game.createGameItem('ghost2',30);
                 enemy.x = x;
@@ -222,6 +223,7 @@ function createGhost2 (x,y) {
             createReward2(6200, groundY - 100);
             createReward2(6400, groundY - 100);
 
+//level 2 health regeneration
 function createTardis (x,y) {
             var hitZoneSize = 50;
             var tardis = game.createGameItem('tardis', hitZoneSize);
