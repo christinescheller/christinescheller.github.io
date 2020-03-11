@@ -14,3 +14,13 @@ canvas {
     -ms-user-select: none;
     position:absolute;
 }
+
+#anim {
+  background-image: url('img/insertcoingif.gif');
+  width: 250px;
+  height: 188px;
+  animation: anim 1.0s steps(10) infinite;
+}
+@keyframes anim {
+  100% { background-position: -2500px; }
+}

@@ -59,11 +59,18 @@ var background = function (window) {
                     background.addChild(circle);
                 }
                  var moon = draw.bitmap('img/moon.png');
-                 moon.x = 1400;
+                 moon.x = 1200;
                  moon.y = 25;
                  moon.scaleX = .5;
                  moon.scaleY = .5;
                  background.addChild(moon);
+                 
+                                  
+                 var logo = draw.bitmap('img/insertcoingif.gif');
+                 logo.x = 400;
+                 logo.y = 25;
+
+                 background.addChild(logo);
             
             /* Did it but don't want it.
             TODO: 5 - Add buildings!     Q: This is before TODO 4 for a reason! Why?
@@ -86,7 +93,7 @@ var background = function (window) {
                 tree.y = groundY - 250;
                 background.addChild(tree);
             */
-            
+
 //millenium falcon      
             falcon = draw.bitmap('img/falcon.png');
                 falcon.x = 2500;
@@ -98,7 +105,7 @@ var background = function (window) {
 //enterprise     
             enterprise = draw.bitmap('img/enterprise.png');
                 enterprise.x = 5000;
-                enterprise.y = groundY - 350;
+                enterprise.y = groundY - 300;
                 enterprise.scaleX = 1;
                 enterprise.scaleY = 1;
                 background.addChild(enterprise);
@@ -137,6 +144,7 @@ var background = function (window) {
        
         }
         
+
         // Perform background animation
         // called on each timer "tick" - 60 times per second
         function update() {
