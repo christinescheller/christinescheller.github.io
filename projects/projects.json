@@ -4,5 +4,6 @@
         { "name": "bouncing-box", "title": "Bouncing Box", "description": "A project that gives you a taste of game development on the web ", "date": "Wednesday, July 17, 2019" },
         { "name": "circularity", "title": "Circularity", "description": "A project about iteration and Arrays", "date": "Wednesday, July 17, 2019" },
         { "name": "runtime", "title": "Runtime", "description": "A Sidescrolling game featuring Halleb0t", "date": "Wednesday, July 17, 2019" }
+        { "name": "box-walker", "title": "Box Walker", "description": "A 2-Player Tag Game", "date": "Tuesday, June 9, 2020" }
     ] 
 }
