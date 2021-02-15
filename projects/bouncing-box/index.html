@@ -6,12 +6,12 @@
 	<script src="jquery.min.js"></script>
 	<style>
         body {
-        background: url("backgroundimage.jpg") no-repeat center center fixed;;
-        background-color: #cccccc;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
+            background: url("backgroundimage.jpg") no-repeat center center fixed;;
+            background-color: #cccccc;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
         }
 
 		.box {
@@ -20,6 +20,7 @@
 			background-color: white;
 			font-size: 300%;
 			text-align: center;
+            color: white;
 			display: block;
 			position: absolute;
 			top: 100px;
@@ -46,6 +47,7 @@
 			var board = jQuery('.board');	// reference to the HTML .board element
 			var boardWidth = board.width();	// the maximum X-Coordinate of the screen
             var boardHeight = jQuery(window).height(); 
+         
 
 			// Every 50 milliseconds, call the update Function (see below)
 			setInterval(update, 50);
@@ -56,7 +58,7 @@
 			// moves the Box to a new position on the screen along the X-Axis
 			function moveBoxTo(newPositionX, newPositionY) {
                 box.css("left", newPositionX);
-                 box.css('top', newPositionY);
+                box.css('top', newPositionY);
 			}
 
 			// changes the text displayed on the Box
@@ -74,9 +76,10 @@
             var points = 0;
             var speed = 10;
             var speedY = 10;
-            var randNumX = getRndInteger(0, boardWidth);
-            var randNumY = getRndInteger(0, boardHeight);
-
+            var color1;
+            var color2;
+            var color3;          
+            
 			
 			/* 
 			This Function will be called 20 times/second. Each time it is called,
@@ -108,23 +111,31 @@
 			the left side of the screen.
 			*/
 			function handleBoxClick() {
-                positionX = 0;
-                positionY = 5;
+                var randNum = Math.random() * boardWidth;
+                var randNumY = Math.random() * boardHeight;
+                positionX = randNum;
+                positionY = randNumY;
                 changeBoxText(points);
                 points++;
                 speed = speed + 3;
                 speedY = speedY + 3;
+                changeBoxColorOnClick();              
+                
 
             };
-            
 
-            /* 
-			This Function return a random number and allows you to set the max and minimum parameters.
-			*/
-           /* function getRndInteger(min, max) {
-                return Math.floor(Math.random() * (max - min + 1) ) + min;
+            function changeBoxColorOnClick(){
+                var color1 = Math.random(0, 255) * 100;
+                var color2 = Math.random(0, 255) * 100;
+                var color3 = Math.random(0, 255) * 100; 
+                var colorStr = "rgb(" + color1 + "," + color2 + ","+ color3 + ")";
+                console.log(color1);
+                console.log(colorStr);
+                box.css('background-color', colorStr);              
+
             }
-                */
+
+            
 
 		})();
 	</script>
