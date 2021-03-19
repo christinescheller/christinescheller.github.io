@@ -26,17 +26,17 @@ var init = function (window) {
         
             // TODO 2: Draw a circle //
             function drawCircle() {
-            circle = draw.randomCircleInArea(canvas, true, true, '#999', 2);
-            physikz.addRandomVelocity(circle, canvas);
-            view.addChild(circle);
-            circles.push(circle);
+                circle = draw.randomCircleInArea(canvas, true, true, '#999', 2);
+                physikz.addRandomVelocity(circle, canvas);
+                view.addChild(circle);
+                circles.push(circle);
             }
 
         // TODO 3 : Call the drawCircle function 5 times //
       
-            for (var counter = 0; counter < 600; counter++) {
+            for (var i = 0; i < 600; i++) {
                 drawCircle();
-        }
+            }
         // TODO 7 : Create a Loop to call drawCircle 100 times
 
     
@@ -76,7 +76,6 @@ var init = function (window) {
                 
             // TODO 8 : Iterate over the array
            for (var i = 0; i < circles.length; i++) {
-            var eachCircle = circles[i];
             physikz.updatePosition(circles[i]);
             game.checkCirclePosition(circles[i]);
                
