@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pong</title>
+    <!-- Load CSS files -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="index.css">
+    
+    <!-- Load JavaScript files -->
+    <script src="jquery.min.js"></script>
+    <script src="index.js"></script>
+    <script src="sounds.js" type="text/javascript"></script>
+  </head>
+  
+  <body>
+     <h1 id="title"><a href="https://www.youtube.com/watch?v=7vBZmzLXBK8" target="_blank">PONG</a></h1>
+    <div id='board'>
+      <h1 id="playerName1"></h1>
+      <h1 id="playerName2"></h1>
+      <h1 id="winner"></h1>
+      <div id='ball'></div>
+      <div id='paddleLeft'></div>
+      <div id='paddleRight'></div>
+      <div id = "scorePaddleLeft"></div>
+      <div id = "scorePaddleRight"></div>
+      <button id = "playAgain" onClick="window.location.reload();"></button>
+    </div>
+  </body>
+</html>

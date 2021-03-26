@@ -1,0 +1,28 @@
+1. How is the jQuery file being loaded into this project: direct download or Content Delivery Network (CDN)?
+
+A: Content Delivery Network. It is being hosted externally--not in my files.
+
+
+2. If you load the index.js file before the jquery file our program doesn't work. Why? Open the preview in a new tab and look at the console to help you find out why.
+
+A: It requires jQuery to load. If it tries to load the js file it won't be able to load the jQuery
+
+
+3. In your opinion, what are the pros of refactoring your HTML, CSS, and JavaScript into separate files? What are the cons?
+
+A: Pros: Organization, especially as your projects get more complcated. Some sites may have thousands of lines of CSS or JS.
+   Cons: None?
+
+
+4. In your opinion, what are the pros of refactoring your JavaScript code into separate functions? What are the cons?
+
+A: Pros: Readability; Able to change just the helper function instead of having to track down that same instance of 
+   in possibly hundreds or thousands of different uses in a program.
+   Cons: It takes extra time
+   
+   
+   
+   when one gameitem tags another, the one who is "it" glows red.
+   score keepers for each player (each tag of other player is a point
+   
+   

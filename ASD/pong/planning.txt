@@ -1,0 +1,51 @@
+Describe the gameplay:
+    
+    There are two players and one ball. Each player hits the ball in turn, attempting to make their opponent miss.
+    When the opponent misses, the other player gets a point. 
+
+
+What are the conditions when the game begins?
+    When the game begins, both players have their point counter set to zero and the ball begins in the middle
+    of the screen.
+
+Does the game have an end? If so, what are the conditions for when it ends?
+
+    The game ends when one player has reached 11 points.
+
+What ifs will there be?
+
+
+Visual Game Components:
+What are the visual game components? For example, in Bouncing Box, the game components were the board and the box
+    Two paddles (animated)
+    One ball (animated)
+    Two score boxes (animated)
+    
+Which will be static? (the board)
+
+What data will you need to manage each game component? For example, in Bouncing Box, the data values were positionX, speedX, and points.
+
+    positionX and positionY of the ball
+    positionY for the paddles since they only move vertically
+    speedX and speedY
+    points for each player
+    
+Events / Logic
+What events will occur in this game? (timer events, keyboard events, clicking events?)
+
+    up and down/w and s to move the paddles (keydown/keyup)
+    setInterval to check position
+    collision events to check for collision with the ball and walls
+    
+How do those events affect the data of the program?
+    Moves the game components
+    increases score
+
+For each "event", write out the high-level logic of what will happen. It is better (and tricky) to be as specific as you can while remaining high-level!
+
+When keys are pressed:
+1. the paddle moves up or down
+
+When collision is detected:
+1. If the ball collides with the left or right wall, it is a point for the player who hit the ball. The player's counter increases and the ball is reset to the middle of the screen.
+2. If the ball collides with the paddle or top or bottom wall, it bounces back toward the opponent

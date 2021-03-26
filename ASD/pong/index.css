@@ -1,0 +1,129 @@
+body {
+  background-color: black;
+  background-image: url("background.jpg");
+}
+
+#board {
+  width: 900px;
+  left: 50%;
+  margin-top: -200px;
+  margin-left: -480px;
+  position: absolute;
+  top: 50%;
+  height: 500px;
+  border: 5px solid;
+  border-image: conic-gradient(red, yellow, lime, aqua, blue, magenta, red) 1;
+  background-image: url("boardbackground.png");
+ }
+ 
+
+#paddleLeft {
+  background-color: white;
+  width: 20px;
+  height: 90px;
+  position: absolute;
+  top: 200px;
+}
+
+#paddleRight {
+  background-color: white;
+  width: 20px;
+  height: 90px;
+  position: absolute;
+  top: 200px;
+}
+
+#ball {
+  background-color: white;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  border-radius: 50px;
+}
+  
+#scorePaddleLeft {
+  font-size: 3vw;
+  font-family: 'Press Start 2P', cursive;
+  color: white;
+  position: absolute;
+  left: 225px;
+  top: 50px;
+}
+
+#scorePaddleRight {
+  font-size: 3vw;
+  font-family: 'Press Start 2P', cursive;
+  color: white;
+  position: absolute;
+  right: 225px;
+  top: 50px;
+}
+
+#playerName1 {
+  font-size: 1.2vw;
+  font-family: 'Press Start 2P', cursive;
+  color: white;
+  position: absolute;
+  left: 10px;
+
+}
+
+#playerName2 {
+  font-size: 1.2vw;
+  font-family: 'Press Start 2P', cursive;
+  color: white;
+  position: absolute;
+  right: 10px;
+}
+
+#winner {
+  text-align: center;
+  font-size: 4vw;
+  font-family: 'Press Start 2P', cursive;
+  color: white;
+  position: absolute;
+}
+
+#playAgain {
+  text-align: center;
+  margin: 30px 0 0 0;
+  font-size: 3vw;
+  font-family: 'Press Start 2P', cursive;
+  color: black;
+  position: absolute;
+}
+
+
+#title {
+  text-align: center;
+  margin: 75px 0 0 0;
+  font-size: 8vw;
+  padding: 0px;
+  color: transparent;
+  letter-spacing: -.1rem;
+  font-family: 'Press Start 2P', cursive;
+     text-shadow: 
+      5px -5px 0 #E23769,
+      1px -8px 0 #E9CD55,
+      0px -1px 0 #70B3EB,
+      -1px -2px 0 #70B3EB, 
+      -4px -4px 0 #70B3EB, 
+      -6px -6px 0 #70B3EB, 
+      -8px -8px 0 #70B3EB, 
+      -10px -10px 0 #70B3EB, 
+      -12px -12px 0 #70B3EB, 
+      -14px -14px 0 #70B3EB, 
+      -16px -16px 0 #70B3EB, 
+      -18px -18px 0 #70B3EB, 
+      -20px -20px 0 #70B3EB, 
+      -22px -22px 0 #70B3EB, 
+      -24px -24px 0 #70B3EB, 
+      -26px -26px 0 #70B3EB, 
+      -28px -28px 0 #70B3EB, 
+      -30px -15px 30px rgba(0, 0, 0, 0.6); 
+}
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
