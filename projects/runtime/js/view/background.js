@@ -53,24 +53,25 @@ var background = function (window) {
                 
                 var circle;
                     for(var i=0;i<100;i++) {
-                    circle = draw.circle(1,'white','LightGray',2);
-                    circle.x = canvasWidth*Math.random();
-                    circle.y = groundY*Math.random();
-                    background.addChild(circle);
-                }
+                        circle = draw.circle(1,'white','LightGray',2);
+                        circle.x = canvasWidth*Math.random();
+                        circle.y = groundY*Math.random();
+                        background.addChild(circle);
+                    }
+
                  var moon = draw.bitmap('img/moon.png');
-                 moon.x = 1200;
-                 moon.y = 25;
-                 moon.scaleX = .5;
-                 moon.scaleY = .5;
-                 background.addChild(moon);
+                    moon.x = 1200;
+                    moon.y = 25;
+                    moon.scaleX = .5;
+                    moon.scaleY = .5;
+                    background.addChild(moon);
                  
                                   
                  var logo = draw.bitmap('img/insertcoingif.gif');
-                 logo.x = 400;
-                 logo.y = 25;
+                    logo.x = 400;
+                    logo.y = 25;
 
-                 background.addChild(logo);
+                    background.addChild(logo);
             
             /* Did it but don't want it.
             TODO: 5 - Add buildings!     Q: This is before TODO 4 for a reason! Why?
@@ -162,17 +163,18 @@ var background = function (window) {
                 // }
                 
                  sTree.x = sTree.x - 2;
-                if(sTree.x < -500) {
+
+                if (sTree.x < -500) {
                      sTree.x = canvasWidth;
                  }
                  
                  sTree2.x = sTree2.x - 1;
-                if(sTree2.x < -500) {
+                if (sTree2.x < -500) {
                      sTree2.x = canvasWidth;
                  }
                  
                  sTree3.x = sTree3.x - 1;
-                if(sTree3.x < -500) {
+                if (sTree3.x < -500) {
                      sTree3.x = canvasWidth;
                  }
                 

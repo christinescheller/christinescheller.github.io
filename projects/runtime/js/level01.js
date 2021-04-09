@@ -45,7 +45,7 @@ var level01 = function (window) {
                 
                 //level 2
                 
-                {type: 'tardis', x:4500, y:groundY-129},
+                {type: 'tardis', x:4500, y:groundY-129, level: 2},
                 
                 {type: 'sawblade', x:5000, y:groundY-110, level: 2},
                 {type: 'sawblade', x:5100, y:groundY-110, level: 2},
@@ -245,7 +245,7 @@ function createTardis (x,y) {
 
         
 
-        for (var i = 0; i <= levelData.gameItems.length-1; i++) {
+        for (var i = 0; i < levelData.gameItems.length; i++) {
            var gameItem = levelData.gameItems[i];
             
             if (gameItem.level === 1){
