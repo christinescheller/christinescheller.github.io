@@ -11,6 +11,7 @@ var background = function (window) {
     var falcon;
     var tardis;
     var level2;
+    var delorean;
     var enterprise;
     var buildings = [];
     
@@ -45,8 +46,15 @@ var background = function (window) {
             
             // this fills the background with a obnoxious yellow
             // you should modify this to suit your game
-            var backgroundFill = draw.rect(canvasWidth,groundY,'purple');
+            var ctx = canvas.getContext("2d"); 
+            var grd = ctx.createLinearGradient(0,canvasHeight,0,0);
+            grd.addColorStop(0.26, "#ffffff");
+            grd.addColorStop(0.3,"#C724B1");
+            grd.addColorStop(1,"#000000"); 
+            grd.addColorStop(0.1,"#000000");
+            var backgroundFill = draw.rect(canvasWidth, groundY, grd);
             background.addChild(backgroundFill);
+            //thanks Tony
             
             // TODO: 3 - Add a moon and starfield   
             
@@ -60,10 +68,10 @@ var background = function (window) {
                     }
 
                  var moon = draw.bitmap('img/moon.png');
-                    moon.x = 1200;
+                    moon.x = canvasWidth - 300;
                     moon.y = 25;
-                    moon.scaleX = .5;
-                    moon.scaleY = .5;
+                    moon.scaleX = .4;
+                    moon.scaleY = .4;
                     background.addChild(moon);
                  
                                   
@@ -98,18 +106,19 @@ var background = function (window) {
 //millenium falcon      
             falcon = draw.bitmap('img/falcon.png');
                 falcon.x = 2500;
-                falcon.y = groundY - 320;
-                falcon.scaleX = .4;
-                falcon.scaleY = .4;
+                falcon.y = groundY - 500;
+                falcon.scaleX = .6;
+                falcon.scaleY = .6;
                 background.addChild(falcon);
                 
 //enterprise     
             enterprise = draw.bitmap('img/enterprise.png');
                 enterprise.x = 5000;
-                enterprise.y = groundY - 300;
-                enterprise.scaleX = 1;
-                enterprise.scaleY = 1;
+                enterprise.y = groundY - 400;
+                enterprise.scaleX = 1.2;
+                enterprise.scaleY = 1.2;
                 background.addChild(enterprise);
+              
                 
 //trees
             sTree = draw.bitmap('img/silhouettetree.png');
@@ -135,14 +144,24 @@ var background = function (window) {
                 
 //Level 2
             
-            level2 = draw.bitmap('img/level2.png');
+                level2 = draw.bitmap('img/level2.png');
                 level2.x = 5000;
-                level2.y = groundY - 233;
-                level2.scaleX = 2;
-                level2.scaleY = 2;
+                level2.y = groundY - 400 ;
+                level2.scaleX = 2; 
+                level2.scaleY = 2;    
                 background.addChild(level2);
-        
+
+//Delorean
+            
+                delorean = draw.bitmap('img/delorean.png');
+                delorean.x = 4000;
+                delorean.y = groundY - 135;
+                delorean.scaleX = .4; 
+                delorean.scaleY = .4;    
+                background.addChild(delorean);
+                 
        
+// Do not delete
         }
         
 
@@ -186,6 +205,9 @@ var background = function (window) {
                
 //enterprise
                enterprise.x = enterprise.x - 4;
+
+//enterprise
+               delorean.x = delorean.x - 2;   
                  
             // TODO 5: Part 2 - Parallax
                 

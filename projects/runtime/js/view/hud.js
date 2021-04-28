@@ -87,6 +87,11 @@
         
         hud.kill = function () {
             createjs.Tween.get(integrityMeter).to({alpha:0}, 1000);
+            /*
+                setTimeout(function() {
+                    document.location.reload()
+                    alert("press enter to start over");
+                }, 1100);*/
         };
         
         return hud;

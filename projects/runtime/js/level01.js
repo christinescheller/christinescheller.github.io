@@ -119,7 +119,7 @@ var level01 = function (window) {
 
             
 // baddies
-        function createEnemy (x,y, level) {
+        function createEnemy (x, y, level) {
             var enemy =  game.createGameItem('enemy',30);
 
                 if (level === 1){   
@@ -164,7 +164,7 @@ var level01 = function (window) {
                     game.addGameItem(enemy);
                     
                     enemy.onPlayerCollision = function() {
-                        game.changeIntegrity(-30);
+                        game.changeIntegrity(-40);
                         enemy.fadeOut();
                     };
                     
@@ -224,22 +224,22 @@ var level01 = function (window) {
 //level 2 health regeneration
 function createTardis (x,y) {
             var hitZoneSize = 50;
-            var tardis = game.createGameItem('tardis', hitZoneSize);
-                tardis.x = x;
-                tardis.y = y + 50;
-                tardis.velocityX = - 2.2;
+            var reward = game.createGameItem('tardis', hitZoneSize);
+                reward.x = x;
+                reward.y = y + 50;
+                reward.velocityX = - 2.2;
                 
             var tardis = draw.bitmap('img/tardis.png');
                 tardis.x = - 70;
                 tardis.y = - 175;
             
-            tardis.addChild(tardis);
+            reward.addChild(tardis);
             
-            game.addGameItem(tardis);
+            game.addGameItem(reward);
             
-            tardis.onPlayerCollision = function() {
+            reward.onPlayerCollision = function() {
                  game.changeIntegrity(+50);
-                tardis.fadeOut();
+                reward.fadeOut();
             };
         }
 
