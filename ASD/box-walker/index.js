@@ -161,12 +161,12 @@ $(document).ready(function(){
 
   
   function repositionAndRedrawGameItems(){
-    gameItem.x += gameItem.speedX;    // update the position of the circle along the x-axis
-    gameItem.y += gameItem.speedY;   // update the position of the circle along the x-axis
+    gameItem.x += gameItem.speedX;    // update the position of Indy along the x-axis
+    gameItem.y += gameItem.speedY;   // update the position of Indy along the x-axis
     $(gameItem.id).css("left", gameItem.x);    // draw the gameItem in the new location, positionX pixels away from the "left"
     $(gameItem.id).css("top", gameItem.y);    // draw the gameItem in the new location, positionY pixels away from the "top"
-    gameItem2.x += gameItem2.speedX;    // update the position of the box along the x-axis
-    gameItem2.y  += gameItem2.speedY;   // update the position of the box along the x-axis
+    gameItem2.x += gameItem2.speedX;    // update the position of Hitler along the x-axis
+    gameItem2.y  += gameItem2.speedY;   // update the position of Hitler along the x-axis
     $(gameItem2.id).css("right", gameItem2.x);    // draw the gameItem in the new location, positionX pixels away from the "left"
     $(gameItem2.id).css("bottom", gameItem2.y);    // draw the gameItem in the new location, positionY pixels away from the "top"
   }
