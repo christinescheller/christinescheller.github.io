@@ -6,7 +6,7 @@
 	<script src="jquery.min.js"></script>
 	<style>
         body {
-            background: url("backgroundimage.jpg") no-repeat center center fixed;;
+            background: url("backgroundimage.jpg") no-repeat center center fixed;
             background-color: #cccccc;
             -webkit-background-size: cover;
             -moz-background-size: cover;
@@ -117,8 +117,11 @@
                 positionY = randNumY;
                 changeBoxText(points);
                 points++;
-                speed = speed + 3;
-                speedY = speedY + 3;
+				if (speed > 0){
+					speed += 3;
+				} else if (speed < 0){
+					speed -= 3;
+				}
                 changeBoxColorOnClick();      
             };
 
