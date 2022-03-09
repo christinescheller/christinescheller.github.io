@@ -41,12 +41,12 @@ $(document).ready(function() {
 
   var ball = GameItem(BOARD_WIDTH / 2, BOARD_HEIGHT / 2, (Math.random() > 0.5 ? -3 : 3), (Math.random() > 0.5 ? -3 : 3), "#ball");
 
-
+  $("#playAgain").hide() 
 
   // other game variables
 
-  var scorePL = 0;
-  var scorePR = 0;
+  var scorePL = 9;
+  var scorePR = 9;
   var paddleLeftWins = paddleLeft.name + " WINS!";
   var paddleRightWins = paddleRight.name + " WINS!";
   var winner = "#winner";
@@ -59,7 +59,6 @@ $(document).ready(function() {
   // turn on event handlers
   var interval = setInterval(newFrame, 1000 / FPS); // execute newFrame 60 times per second.
   $(document).on('keydown', handleKeyDown); // change 'eventType' to the type of event you want to handle
-
   $(document).on('keyup', handleKeyUp); // change 'eventType' to the type of event you want to handle
 
   /* 
@@ -73,6 +72,9 @@ $(document).ready(function() {
     drawGameObject(paddleLeft);
     drawGameObject(paddleRight);
     drawGameObject(ball);
+    updateGameObject(paddleLeft);
+    updateGameObject(paddleRight);
+    updateGameObject(ball);
     checkBoundaries(paddleLeft);
     checkBoundaries(paddleRight);
     handlePoints();
@@ -88,17 +90,17 @@ $(document).ready(function() {
   function handleKeyDown(event) {
 
     if (event.which === KEY.UP) {
-      paddleRight.speedY = -5;
+      paddleRight.speedY = -7;
     }
     if (event.which === KEY.DOWN) {
-      paddleRight.speedY = 5;
+      paddleRight.speedY = 7;
     }
 
     if (event.which === KEY.W) {
-      paddleLeft.speedY = 5;
+      paddleLeft.speedY = 7;
     }
     if (event.which === KEY.S) {
-      paddleLeft.speedY = -5;
+      paddleLeft.speedY = -7;
     }
   }
 
@@ -119,10 +121,14 @@ $(document).ready(function() {
   /////////////////////////////////////////////////////////////////////////
 
   function drawGameObject(obj) {
-    obj.y += obj.speedY; // update the position of paddleLeft along the y-axis
-    obj.x += obj.speedX;
+
     $(obj.id).css("top", obj.y); // draw paddleLeft in the new location, positionY pixels away from the "top"
     $(obj.id).css("left", obj.x);
+  }
+
+  function updateGameObject(obj){
+    obj.y += obj.speedY; // update the position of paddleLeft along the y-axis
+    obj.x += obj.speedX;
   }
 
   function checkBoundaries(obj) {
@@ -223,6 +229,7 @@ $(document).ready(function() {
     $("#playAgain").text("PLAY AGAIN");
     $("#playAgain").css("top", BOARD_HEIGHT - $("#playAgain").height());
     $("#playAgain").css("left", BOARD_WIDTH / 2 - $("#playAgain").width() / 2);
+    $("#playAgain").show();
   }
   
   // Scoring Helpers
@@ -230,13 +237,13 @@ $(document).ready(function() {
   
   function handleWinner() {
     if (scorePL === 11) {
-      reset();
+      endGame();
       $(winner.id).text(paddleLeftWins);
       drawWinner();
       drawPlayAgainButton();
     }
     else if (scorePR === 11) {
-      reset();
+      endGame();
       $(winner.id).text(paddleRightWins);
       drawWinner();
       drawPlayAgainButton();
@@ -269,18 +276,9 @@ $(document).ready(function() {
   function reset() {
 
     if (scorePL !== 11 || scorePR !== 11) {
-      paddleLeft.y = 200;
-      paddleLeft.speedY = 0;
-      paddleLeft.speedX = 0;
-
-      paddleRight.y = 200;
-      paddleRight.speedY = 0;
-      paddleRight.speedX = 0;
-
-      ball.x = BOARD_WIDTH / 2;
-      ball.y = BOARD_HEIGHT / 2;
-      ball.speedX = (Math.random() > 0.5 ? -3 : 3);
-      ball.speedY = (Math.random() > 0.5 ? -3 : 3);
+        paddleLeft = GameItem(20, 200, 0, 0, "#paddleLeft");
+        paddleRight = GameItem(BOARD_WIDTH - 20 - $('#paddleRight').width(), 200, 0, 0, "#paddleRight");
+        ball = GameItem(BOARD_WIDTH / 2, BOARD_HEIGHT / 2, (Math.random() > 0.5 ? -3 : 3), (Math.random() > 0.5 ? -3 : 3), "#ball");
     }
     else {
       paddleLeft.y = 200;
