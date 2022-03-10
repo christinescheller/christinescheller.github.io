@@ -154,12 +154,12 @@ var background = function (window) {
 //Delorean
             
                 delorean = draw.bitmap('img/delorean.png');
-                delorean.x = 4000;
+                delorean.x = 4500;
                 delorean.y = groundY - 135;
                 delorean.scaleX = .4; 
                 delorean.scaleY = .4;    
                 background.addChild(delorean);
-                 
+                  
        
 // Do not delete
         }

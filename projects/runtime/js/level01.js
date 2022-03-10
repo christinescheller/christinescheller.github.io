@@ -13,7 +13,7 @@ var level01 = function (window) {
         // behavior of our game
         
         var levelData = {
-            name: "Robot Romp",
+            name: "Insert Coin",
             number: 1, 
             speed: -3,
             gameItems: [
@@ -26,14 +26,14 @@ var level01 = function (window) {
                 {type: 'sawblade',x:3400,y:groundY - 110, level: 1},
                 
                 {type: 'spikes', x:900, y:groundY-18, level: 1},
-                {type: 'spikes', x:1400, y:groundY-18, level: 1},
+                {type: 'spikes', x:1300, y:groundY-18, level: 1},
                 {type: 'spikes', x:2200, y:groundY-18, level: 1},
                 {type: 'spikes', x:2700, y:groundY-18, level: 1},
                 {type: 'spikes', x:3200, y:groundY-18, level: 1},
                 {type: 'spikes', x:3800, y:groundY-18, level: 1},
                 
                 {type: 'reward', x:900,y:groundY-120, level: 1},
-                {type: 'reward', x:1400, y:groundY-120, level: 1},
+                {type: 'reward', x:1300, y:groundY-120, level: 1},
                 {type: 'reward', x:2200, y:groundY-120, level: 1},
                 {type: 'reward', x:2700, y:groundY-120, level: 1},
                 {type: 'reward', x:3200,y:groundY-120, level: 1},
@@ -79,7 +79,7 @@ var level01 = function (window) {
         // BEGIN EDITING YOUR CODE HERE
       
     //sawblade
-        
+
         function createSawBlade(x,y) {
             var hitZoneSize = 25;
             var damageFromObstacle = 10;
@@ -96,7 +96,7 @@ var level01 = function (window) {
             obstacleImage.x = -25;
             obstacleImage.y = -25;
              
-            }
+        }
             
 
      //additional obstacle
@@ -157,22 +157,22 @@ var level01 = function (window) {
                     enemy.addChild(ghost);
                     
                 }
-                    enemy.x = x;
-                    enemy.y = y;
-                    enemy.velocityX = -1.5;
-                        
-                    game.addGameItem(enemy);
+                enemy.x = x;
+                enemy.y = y;
+                enemy.velocityX = -1.5;
                     
-                    enemy.onPlayerCollision = function() {
-                        game.changeIntegrity(-40);
-                        enemy.fadeOut();
-                    };
-                    
-                    enemy.onProjectileCollision = function() {
-                        game.increaseScore(50);
-                        enemy.fadeOut();
-                    };
-            }
+                game.addGameItem(enemy);
+                
+                enemy.onPlayerCollision = function() {
+                    game.changeIntegrity(-40);
+                    enemy.fadeOut();
+                };
+                
+                enemy.onProjectileCollision = function() {
+                    game.increaseScore(50);
+                    enemy.fadeOut();
+                };
+        }
         
         
 
@@ -222,16 +222,16 @@ var level01 = function (window) {
 
 
 //level 2 health regeneration
-function createTardis (x,y) {
+        function createTardis (x,y) {
             var hitZoneSize = 50;
             var reward = game.createGameItem('tardis', hitZoneSize);
                 reward.x = x;
-                reward.y = y + 50;
+                reward.y = y + 75;
                 reward.velocityX = - 2.2;
                 
             var tardis = draw.bitmap('img/tardis.png');
                 tardis.x = - 70;
-                tardis.y = - 175;
+                tardis.y = - 200;
             
             reward.addChild(tardis);
             
