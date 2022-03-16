@@ -43,34 +43,8 @@ body {
   font-family: 'Press Start 2P', cursive;
   color: white;
   position: absolute;
-  left: 30px;
+  left: 100px;
+  top: 50%;
 }
 
-#title {
-  text-align: center;
-  margin: 75px 0 0 0;
-  font-size: 8vw;
-  padding: 0px;
-  color: transparent;
-  letter-spacing: -.1rem;
-  font-family: 'Press Start 2P', cursive;
-     text-shadow: 
-      5px -5px 0 #E23769,
-      1px -8px 0 #E9CD55,
-      0px -1px 0 #70B3EB,
-      -1px -2px 0 #70B3EB, 
-      -4px -4px 0 #70B3EB, 
-      -6px -6px 0 #70B3EB, 
-      -8px -8px 0 #70B3EB, 
-      -10px -10px 0 #70B3EB, 
-      -12px -12px 0 #70B3EB, 
-      -14px -14px 0 #70B3EB, 
-      -16px -16px 0 #70B3EB, 
-      -18px -18px 0 #70B3EB, 
-      -20px -20px 0 #70B3EB, 
-      -22px -22px 0 #70B3EB, 
-      -24px -24px 0 #70B3EB, 
-      -26px -26px 0 #70B3EB, 
-      -28px -28px 0 #70B3EB, 
-      -30px -15px 30px rgba(0, 0, 0, 0.6); 
-}
+

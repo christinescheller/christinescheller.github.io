@@ -20,6 +20,11 @@ $(document).ready(function(){
 	var SQUARE_SIZE = $("#apple").width();  // the size of the apple is the same size as all squares
   var ROWS = BOARD_WIDTH / SQUARE_SIZE;
   var COLUMNS = BOARD_HEIGHT / SQUARE_SIZE;
+
+  var isLeft;
+  var isRight;
+  var isUp;
+  var isDown;
   
   // Game Item Objects
   
@@ -43,7 +48,7 @@ $(document).ready(function(){
   // other game variables
   
   var points = 0;
-  var snake = [snakeHead];
+  var snakeSegments = [snakeHead];
   
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -72,20 +77,32 @@ $(document).ready(function(){
   */
   function handleKeyDown(event) {
   	if (event.which === KEY.LEFT){
-  	  snakeHead.speedX = -20;
-  	  snakeHead.speedY = 0;
+      isLeft = true;
+      if (isLeft) {
+        snakeHead.speedY = 0;
+        snakeHead.speedX = -20;
+      }
   	}
   	if (event.which === KEY.RIGHT){
-  	  snakeHead.speedX = 20;
-  	  snakeHead.speedY = 0;
+      isRight = true;
+  	  if (isRight) {
+        snakeHead.speedY = 0;
+        snakeHead.speedX = 20;
+      }
 	  }
     if (event.which === KEY.UP){
-      snakeHead.speedY = -20;
-      snakeHead.speedX = 0;
+      isUp = true;
+      if (isUp) {
+        snakeHead.speedY = -20;
+        snakeHead.speedX = 0;
+      }
     }
     if (event.which === KEY.DOWN){
-      snakeHead.speedY = 20;
-      snakeHead.speedX = 0;
+      isDown = true;
+      if (isDown) {
+        snakeHead.speedY = 20;
+        snakeHead.speedX = 0;
+      }
 	  }
   }
 
@@ -101,14 +118,15 @@ $(document).ready(function(){
  }
  
  function repositionSnake(){
-   for (var i = snake.length - 1; i >= 1; i--){
-     snake[i].x = snake[i - 1].x;
-     snake[i].y = snake[i - 1].y;
-     drawObject(snake);
+   for (var i = snakeSegments.length - 1; i >= 1; i--){
+      snakeSegments[i].x = snakeSegments[i - 1].x;
+      snakeSegments[i].y = snakeSegments[i - 1].y;
+      drawObject(snakeSegments);
    }
    
  }
- 
+
+
  function drawObject(object) {
    $(object.id).css("left", object.x);
    $(object.id).css("top", object.y);
@@ -119,7 +137,7 @@ $(document).ready(function(){
  }
  
   function checkBoundaries(obj){
-		if (obj.x > BOARD_WIDTH - 10|| obj.x < 0 || obj.y > BOARD_HEIGHT - 25|| obj.y < 0){ 
+		if (obj.x > BOARD_WIDTH - 40|| obj.x < 20 || obj.y > BOARD_HEIGHT - 40|| obj.y < 20){ 
     	  endGame();
 		}
   }
@@ -134,19 +152,19 @@ $(document).ready(function(){
   }
   
   function increaseBody(){
-    var newID = "snake" + snake.length;
+    var newID = "snake" + snakeSegments.length;
     
     $("<div>")
         .addClass("snake")
         .attr('id', newID)
-        .appendTo("#board");
+        .appendTo("#board")
     
-    var tail = snake[snake.length - 1];    
+    var tail = snakeSegments[snakeSegments.length - 1];    
     var newBodyPiece = Snake(tail.x, tail.y, 0, 0, "#" + newID);
     
-    // drawObject(newBodyPiece) here
-    
-    snake.push(newBodyPiece);
+    drawObject(newBodyPiece);    
+    snakeSegments.push(newBodyPiece);
+
   }
   
   
