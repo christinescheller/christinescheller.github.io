@@ -15,16 +15,15 @@ $(document).ready(function(){
     "DOWN": 40,
   };
   
-  var BOARD_WIDTH = $('#board').width();	// Number: the maximum X-Coordinate of the screen
-	var BOARD_HEIGHT= $('#board').height();
-	var SQUARE_SIZE = $("#apple").width();  // the size of the apple is the same size as all squares
-  var ROWS = BOARD_WIDTH / SQUARE_SIZE;
-  var COLUMNS = BOARD_HEIGHT / SQUARE_SIZE;
-
-  var isLeft;
-  var isRight;
-  var isUp;
-  var isDown;
+  const BOARD_WIDTH = $('#board').width();	// Number: the maximum X-Coordinate of the screen
+  const BOARD_HEIGHT= $('#board').height();
+  const SQUARE_SIZE = $("#apple").width();  // the size of the apple is the same size as all squares
+  const ROWS = BOARD_WIDTH / SQUARE_SIZE;
+  const COLUMNS = BOARD_HEIGHT / SQUARE_SIZE;
+  var canLeft = false;
+  var canRight = true;
+  var canUp = true;
+  var canDown = true;
   
   // Game Item Objects
   
@@ -70,39 +69,39 @@ $(document).ready(function(){
     checkBoundaries(snakeHead);
     drawObject(apple);
     snakeEatApple();
+    checkSelf();
+    snakeEatSelf();
   }
   
   /* 
   Called in response to events.
   */
   function handleKeyDown(event) {
-  	if (event.which === KEY.LEFT){
-      isLeft = true;
-      if (isLeft) {
+    if (event.which == KEY.LEFT) {
+      if (snakeHead.speedX == 0 && canLeft) {
         snakeHead.speedY = 0;
         snakeHead.speedX = -20;
       }
-  	}
+    }
   	if (event.which === KEY.RIGHT){
-      isRight = true;
-  	  if (isRight) {
+      if (snakeHead.speedX == 0 && canRight) {
         snakeHead.speedY = 0;
         snakeHead.speedX = 20;
       }
 	  }
     if (event.which === KEY.UP){
-      isUp = true;
-      if (isUp) {
+      if (snakeHead.speedY == 0 && canUp) {
         snakeHead.speedY = -20;
         snakeHead.speedX = 0;
       }
+     
     }
     if (event.which === KEY.DOWN){
-      isDown = true;
-      if (isDown) {
+      if (snakeHead.speedY == 0 && canDown) {
         snakeHead.speedY = 20;
         snakeHead.speedX = 0;
       }
+     
 	  }
   }
 
@@ -121,11 +120,17 @@ $(document).ready(function(){
    for (var i = snakeSegments.length - 1; i >= 1; i--){
       snakeSegments[i].x = snakeSegments[i - 1].x;
       snakeSegments[i].y = snakeSegments[i - 1].y;
-      drawObject(snakeSegments);
+      drawObject(snakeSegments[i]);
    }
    
  }
 
+ function checkSelf() {
+  snakeHead.x > snakeHead.prevX ? canLeft = false : canLeft = true;
+  snakeHead.x < snakeHead.prevX ? canRight = false : canRight = true;
+  snakeHead.y > snakeHead.prevY ? canUp = false : canUp = true;
+  snakeHead.y < snakeHead.prevY ? canDown = false : canDown = true;
+}
 
  function drawObject(object) {
    $(object.id).css("left", object.x);
@@ -137,7 +142,7 @@ $(document).ready(function(){
  }
  
   function checkBoundaries(obj){
-		if (obj.x > BOARD_WIDTH - 40|| obj.x < 20 || obj.y > BOARD_HEIGHT - 40|| obj.y < 20){ 
+		if (obj.x > BOARD_WIDTH - 20|| obj.x < 0 || obj.y > BOARD_HEIGHT - 20|| obj.y < 0){ 
     	  endGame();
 		}
   }
@@ -148,6 +153,12 @@ $(document).ready(function(){
       apple.x = Math.floor(Math.random() * 45) * 20;
       apple.y = Math.floor(Math.random() * 25) * 20;
       increaseBody();
+    }
+  }
+
+  function snakeEatSelf(){
+    if (snakeHead.x === tail.x && snakeHead.y === tail.y){
+        endGame();
     }
   }
   
