@@ -49,13 +49,13 @@ $(document).ready(function(){
   var points = 0;
   var snakeSegments = [snakeHead];
   
-
+  $("#playAgain").hide() 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////// CORE LOGIC ///////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   
   // turn on event handlers
-  var interval = setInterval(newFrame, 1000 / FPS);   // execute newFrame 60 times per second.
+  var interval = setInterval(newFrame, 800/ FPS);   // execute newFrame 60 times per second.
   $(document).on('keydown', handleKeyDown);             // change 'eventType' to the type of event you want to handle
 
   /* 
@@ -125,6 +125,13 @@ $(document).ready(function(){
    
  }
 
+ function drawPlayAgainButton() {
+  $("#playAgain").text("PLAY AGAIN");
+  $("#playAgain").css("top", BOARD_HEIGHT/2 - $("#playAgain").height());
+  $("#playAgain").css("left", BOARD_WIDTH + 10);
+  $("#playAgain").show();
+}
+
  function checkSelf() {
   snakeHead.x > snakeHead.prevX ? canLeft = false : canLeft = true;
   snakeHead.x < snakeHead.prevX ? canRight = false : canRight = true;
@@ -157,8 +164,11 @@ $(document).ready(function(){
   }
 
   function snakeEatSelf(){
-    if (snakeHead.x === tail.x && snakeHead.y === tail.y){
-        endGame();
+    for (var i = 1; i < snakeSegments.length; i++) {
+      if (snakeHead.x == snakeSegments[i].x && snakeHead.y == snakeSegments[i].y){
+        console.log("eat");
+          endGame();
+      }
     }
   }
   
@@ -171,7 +181,7 @@ $(document).ready(function(){
         .appendTo("#board")
     
     var tail = snakeSegments[snakeSegments.length - 1];    
-    var newBodyPiece = Snake(tail.x, tail.y, 0, 0, "#" + newID);
+    var newBodyPiece = Snake(tail.x + 2, tail.y, 0, 0, "#" + newID);
     
     drawObject(newBodyPiece);    
     snakeSegments.push(newBodyPiece);
@@ -185,6 +195,7 @@ $(document).ready(function(){
 
     // turn off event handlers
     $(document).off();
+    drawPlayAgainButton()
   }
   
 });

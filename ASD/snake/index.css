@@ -47,4 +47,12 @@ body {
   top: 50%;
 }
 
+#playAgain {
+  text-align: center;
+  margin: 30px 0 0 0;
+  font-size: 3vw;
+  font-family: 'Press Start 2P', cursive;
+  color: black;
+  position: absolute;
+}
 
