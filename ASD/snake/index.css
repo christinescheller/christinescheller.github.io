@@ -1,7 +1,7 @@
 
 body {
   background-color: black;
-  background-image: url("background.jpg");
+  background-image: url("img/background.jpg");
 }
 
 #board {
@@ -16,7 +16,11 @@ body {
   border: 5px solid;
   border-image: conic-gradient(red, yellow, lime, aqua, blue, magenta, red) 1;
   }
- 
+
+  img {
+   
+    position: absolute;
+  } 
 
 .snake, #apple {
   width: 20px;
@@ -34,7 +38,7 @@ body {
 }
 
 #apple {
-  background-color: red;
+  background-image: url("img/apple.png")
 }
 
 #score {
@@ -42,6 +46,7 @@ body {
   font-size: 2vw;
   font-family: 'Press Start 2P', cursive;
   color: white;
+  text-shadow: 2px 2px #000000;
   position: absolute;
   left: 100px;
   top: 50%;
@@ -56,3 +61,23 @@ body {
   position: absolute;
 }
 
+h2 {  
+  color: white;
+  text-shadow: 2px 2px #000000;
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: 0;
+  
+}
+.scoretable {
+  color: rgb(255, 255, 255);
+  text-shadow: 2px 2px #000000;
+  font-family: 'Press Start 2P', cursive;
+  width: 350px;
+  font-size: 1rem;
+  margin: 10px auto;
+  left: 100px;
+  top: 50%;
+}

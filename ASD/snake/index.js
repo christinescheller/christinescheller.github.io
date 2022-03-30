@@ -20,6 +20,9 @@ $(document).ready(function(){
   const SQUARE_SIZE = $("#apple").width();  // the size of the apple is the same size as all squares
   const ROWS = BOARD_WIDTH / SQUARE_SIZE;
   const COLUMNS = BOARD_HEIGHT / SQUARE_SIZE;
+  const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+  const scoreList = document.querySelector('.scoretable');
+
   var canLeft = false;
   var canRight = true;
   var canUp = true;
@@ -93,15 +96,13 @@ $(document).ready(function(){
       if (snakeHead.speedY == 0 && canUp) {
         snakeHead.speedY = -20;
         snakeHead.speedX = 0;
-      }
-     
+      }     
     }
     if (event.which === KEY.DOWN){
       if (snakeHead.speedY == 0 && canDown) {
         snakeHead.speedY = 20;
         snakeHead.speedX = 0;
-      }
-     
+      }     
 	  }
   }
 
@@ -110,47 +111,55 @@ $(document).ready(function(){
   ////////////////////////////////////////////////////////////////////////////////
  
 
- function repositionAndRedrawSnakeHead(){
-   snakeHead.x += snakeHead.speedX;
-   snakeHead.y += snakeHead.speedY;
-   drawObject(snakeHead);
- }
+  function repositionAndRedrawSnakeHead(){
+    snakeHead.x += snakeHead.speedX;
+    snakeHead.y += snakeHead.speedY;
+    drawObject(snakeHead);
+  }
  
- function repositionSnake(){
-   for (var i = snakeSegments.length - 1; i >= 1; i--){
-      snakeSegments[i].x = snakeSegments[i - 1].x;
-      snakeSegments[i].y = snakeSegments[i - 1].y;
-      drawObject(snakeSegments[i]);
-   }
-   
- }
+  function repositionSnake(){
+    for (var i = snakeSegments.length - 1; i >= 1; i--){
+        snakeSegments[i].x = snakeSegments[i - 1].x;
+        snakeSegments[i].y = snakeSegments[i - 1].y;
+        drawObject(snakeSegments[i]);
+    }    
+  }
 
- function drawPlayAgainButton() {
-  $("#playAgain").text("PLAY AGAIN");
-  $("#playAgain").css("top", BOARD_HEIGHT/2 - $("#playAgain").height());
-  $("#playAgain").css("left", BOARD_WIDTH + 10);
-  $("#playAgain").show();
-}
+  function drawPlayAgainButton() {
+    $("#playAgain").text("PLAY AGAIN");
+    $("#playAgain").css("top", '75%');
+    $("#playAgain").css("left", '18%');
+    $("#playAgain").show();
+  }
 
- function checkSelf() {
-  snakeHead.x > snakeHead.prevX ? canLeft = false : canLeft = true;
-  snakeHead.x < snakeHead.prevX ? canRight = false : canRight = true;
-  snakeHead.y > snakeHead.prevY ? canUp = false : canUp = true;
-  snakeHead.y < snakeHead.prevY ? canDown = false : canDown = true;
-}
+  function checkSelf() {
+    snakeHead.x > snakeHead.prevX ? canLeft = false : canLeft = true;
+    snakeHead.x < snakeHead.prevX ? canRight = false : canRight = true;
+    snakeHead.y > snakeHead.prevY ? canUp = false : canUp = true;
+    snakeHead.y < snakeHead.prevY ? canDown = false : canDown = true;
+  }
 
- function drawObject(object) {
-   $(object.id).css("left", object.x);
-   $(object.id).css("top", object.y);
- }
+  function drawObject(object) {
+    $(object.id).css("left", object.x);
+    $(object.id).css("top", object.y);
+  }
  
- function drawScore(){
-   $('#score').text("Score:" + points);
- }
+  function drawScore(){
+    $('#score').text("Score:" + points);
+  }
+
+  function drawGIF(image, top, left) {    
+    console.log("done");
+    $('#board').append($('<img>',{id:'theImg',src:image}));
+    $("img").css("top", top);
+    $("img").css("left", left);
+  }
  
   function checkBoundaries(obj){
 		if (obj.x > BOARD_WIDTH - 20|| obj.x < 0 || obj.y > BOARD_HEIGHT - 20|| obj.y < 0){ 
     	  endGame();
+        drawGIF('img/wall.gif', '25%', '23%');
+        drawPlayAgainButton();
 		}
   }
   
@@ -166,15 +175,15 @@ $(document).ready(function(){
   function snakeEatSelf(){
     for (var i = 1; i < snakeSegments.length; i++) {
       if (snakeHead.x == snakeSegments[i].x && snakeHead.y == snakeSegments[i].y){
-        console.log("eat");
           endGame();
+          drawGIF('img/stop-eating-your-own-snake.gif', '25%', '40%');
+          drawPlayAgainButton();
       }
     }
   }
   
   function increaseBody(){
-    var newID = "snake" + snakeSegments.length;
-    
+    var newID = "snake" + snakeSegments.length;    
     $("<div>")
         .addClass("snake")
         .attr('id', newID)
@@ -185,7 +194,6 @@ $(document).ready(function(){
     
     drawObject(newBodyPiece);    
     snakeSegments.push(newBodyPiece);
-
   }
   
   
@@ -195,7 +203,11 @@ $(document).ready(function(){
 
     // turn off event handlers
     $(document).off();
+    checkScore();
+    $(".snake").remove();
+    $("#apple").remove();
     drawPlayAgainButton()
   }
-  
+
+
 });
