@@ -74,6 +74,7 @@ $(document).ready(function(){
     snakeEatApple();
     checkSelf();
     snakeEatSelf();
+    appleCheck();
   }
   
   /* 
@@ -132,13 +133,6 @@ $(document).ready(function(){
     $("#playAgain").show();
   }
 
-  function checkSelf() {
-    snakeHead.x > snakeHead.prevX ? canLeft = false : canLeft = true;
-    snakeHead.x < snakeHead.prevX ? canRight = false : canRight = true;
-    snakeHead.y > snakeHead.prevY ? canUp = false : canUp = true;
-    snakeHead.y < snakeHead.prevY ? canDown = false : canDown = true;
-  }
-
   function drawObject(object) {
     $(object.id).css("left", object.x);
     $(object.id).css("top", object.y);
@@ -163,11 +157,17 @@ $(document).ready(function(){
 		}
   }
   
+  function checkSelf() {
+    snakeHead.x > snakeHead.prevX ? canLeft = false : canLeft = true;
+    snakeHead.x < snakeHead.prevX ? canRight = false : canRight = true;
+    snakeHead.y > snakeHead.prevY ? canUp = false : canUp = true;
+    snakeHead.y < snakeHead.prevY ? canDown = false : canDown = true;
+  }
+
   function snakeEatApple(){
     if (snakeHead.x === apple.x && snakeHead.y === apple.y){
       points++;
-      apple.x = Math.floor(Math.random() * 45) * 20;
-      apple.y = Math.floor(Math.random() * 25) * 20;
+      moveApple();
       increaseBody();
     }
   }
@@ -180,6 +180,19 @@ $(document).ready(function(){
           drawPlayAgainButton();
       }
     }
+  }
+
+  function appleCheck(){
+    for (var i = 1; i < snakeSegments.length; i++) {
+      if (apple.x == snakeSegments[i].x && apple.y == snakeSegments[i].y){
+        moveApple();
+      }      
+    }
+  }
+
+  function moveApple(){
+    apple.x = Math.floor(Math.random() * 45) * 20;
+    apple.y = Math.floor(Math.random() * 25) * 20;
   }
   
   function increaseBody(){
@@ -203,7 +216,6 @@ $(document).ready(function(){
 
     // turn off event handlers
     $(document).off();
-    checkScore();
     $(".snake").remove();
     $("#apple").remove();
     drawPlayAgainButton()
