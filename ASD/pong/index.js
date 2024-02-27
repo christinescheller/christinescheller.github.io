@@ -122,12 +122,12 @@ $(document).ready(function() {
 
   function drawGameObject(obj) {
 
-    $(obj.id).css("top", obj.y); // draw paddleLeft in the new location, positionY pixels away from the "top"
+    $(obj.id).css("top", obj.y); 
     $(obj.id).css("left", obj.x);
   }
 
   function updateGameObject(obj){
-    obj.y += obj.speedY; // update the position of paddleLeft along the y-axis
+    obj.y += obj.speedY; 
     obj.x += obj.speedX;
   }
 

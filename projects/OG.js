@@ -18,13 +18,13 @@ var level01 = function (window) {
             speed: -3,
             gameItems: [
                 
+
                 //level 1
-                {type: 'obstacle', hitZoneSize: 25, damage: -10, x: 600, y: groundY - 110, velocityX: -2, rotationalVelocity: -4, image: 'img/sawblade.png', hitZoneOffsetX: -25, hitZoneOffsetY: -25},
-                {type: 'obstacle', hitZoneSize: 25, damage: -10, x: 2000, y: groundY - 110, velocityX: -2, rotationalVelocity: -4, image: 'img/sawblade.png', hitZoneOffsetX: -25, hitZoneOffsetY: -25},
-                {type: 'obstacle', hitZoneSize: 25, damage: -10, x: 2900, y: groundY - 110, velocityX: -2, rotationalVelocity: -4, image: 'img/sawblade.png', hitZoneOffsetX: -25, hitZoneOffsetY: -25},
-                {type: 'obstacle', hitZoneSize: 25, damage: -10, x: 3400, y: groundY - 110, velocityX: -2, rotationalVelocity: -4, image: 'img/sawblade.png', hitZoneOffsetX: -25, hitZoneOffsetY: -25},
+                {type: 'sawblade',x:600,y:groundY - 110, level: 1},
+                {type: 'sawblade',x:2000,y:groundY - 110, level: 1},
+                {type: 'sawblade',x:2900,y:groundY - 110, level: 1},
+                {type: 'sawblade',x:3400,y:groundY - 110, level: 1},
                 
-                {type: 'obstacle', hitZoneSize: 25, damage: -20, x: 900, y: groundY - 18, velocityX: -2, rotationalVelocity: 0, image: 'img/spikes.png', hitZoneOffsetX: -25, hitZoneOffsetY: -25},
                 {type: 'spikes', x:900, y:groundY-18, level: 1},
                 {type: 'spikes', x:1300, y:groundY-18, level: 1},
                 {type: 'spikes', x:2200, y:groundY-18, level: 1},
@@ -39,18 +39,18 @@ var level01 = function (window) {
                 {type: 'reward', x:3200,y:groundY-120, level: 1},
                 {type: 'reward', x:3800, y:groundY-120, level: 1},
                 {type: 'enemy', x:600, y:groundY - 50, level: 1},
-                {type: 'enemy', x:2000, y:groundY - 50, level: 1},
+                {type: 'enemy', x:2000,y:groundY - 50, level: 1},
                 {type: 'enemy', x:2700, y:groundY - 50, level: 1},
 
                 
                 //level 2
                 
                 {type: 'tardis', x:4500, y:groundY-129, level: 2},
+                
+                {type: 'sawblade', x:5000, y:groundY-110, level: 2},
+                {type: 'sawblade', x:5100, y:groundY-110, level: 2},
+                {type: 'sawblade', x:5200, y:groundY-110, level: 2},
 
-                {type: 'obstacle', hitZoneSize: 25, damage: -10, x: 5000, y: groundY - 110, velocityX: -2, rotationalVelocity: -4, image: 'img/sawblade.png', hitZoneOffsetX: -25, hitZoneOffsetY: -25},
-                {type: 'obstacle', hitZoneSize: 25, damage: -10, x: 5100, y: groundY - 110, velocityX: -2, rotationalVelocity: -4, image: 'img/sawblade.png', hitZoneOffsetX: -25, hitZoneOffsetY: -25},
-                {type: 'obstacle', hitZoneSize: 25, damage: -10, x: 5200, y: groundY - 110, velocityX: -2, rotationalVelocity: -4, image: 'img/sawblade.png', hitZoneOffsetX: -25, hitZoneOffsetY: -25},
-                {type: 'obstacle', hitZoneSize: 25, damage: -10, x: 3400, y: groundY - 110, velocityX: -2, rotationalVelocity: -4, image: 'img/sawblade.png', hitZoneOffsetX: -25, hitZoneOffsetY: -25},
 
                 {type: 'spikes', x:4800, y:groundY-18, level: 2},
                 {type: 'spikes', x:5400, y:groundY-18, level: 2},
@@ -80,19 +80,22 @@ var level01 = function (window) {
       
     //sawblade
 
-        function createObstacle(hitZoneSize, damage, x, y, velocityX, rotationalVelocity, image, hitZoneOffsetX, hitZoneOffsetY) {
-            var hitZoneSize = hitZoneSize;
-            var myObstacle = game.createObstacle(hitZoneSize, damage);
+        function createSawBlade(x,y) {
+            var hitZoneSize = 25;
+            var damageFromObstacle = 10;
+            var myObstacle = game.createObstacle(hitZoneSize,damageFromObstacle);
             myObstacle.x = x;
             myObstacle.y = y;
             game.addGameItem(myObstacle);  
-             myObstacle.velocityX = velocityX; 
-             myObstacle.rotationalVelocity = rotationalVelocity;            
+             myObstacle.velocityX = -2; 
+             myObstacle.rotationalVelocity = 25;
             
-            var obstacleImage = draw.bitmap(image);
+            
+            var obstacleImage = draw.bitmap('img/sawblade.png');
             myObstacle.addChild(obstacleImage);
-            obstacleImage.x = hitZoneOffsetX;
-            obstacleImage.y = hitZoneOffsetY;             
+            obstacleImage.x = -25;
+            obstacleImage.y = -25;
+             
         }
             
 
@@ -245,9 +248,44 @@ var level01 = function (window) {
         for (var i = 0; i < levelData.gameItems.length; i++) {
            var gameItem = levelData.gameItems[i];
             
-                if (gameItem.type === 'obstacle'){
-                    createObstacle(gameItem.hitZoneSize, gameItem.damage, gameItem.x, gameItem.y, gameItem.velocityX, gameItem.rotationalVelocity, gameItem.image, gameItem.hitZoneOffsetX, gameItem.hitZoneOffsetY)
-                }                       
+            if (gameItem.level === 1){
+                if (gameItem.type === 'sawblade') {
+                  createSawBlade(gameItem.x,gameItem.y,);
+                }
+    
+                if (gameItem.type === 'spikes') {
+                  createSpikes(gameItem.x,gameItem.y);
+                }
+                
+                if (gameItem.type === 'reward') {
+                  createReward(gameItem.x,gameItem.y, 1);
+                }
+                
+                if (gameItem.type === 'enemy') {
+                  createEnemy(gameItem.x,gameItem.y, 1);
+                }
+            } else if (gameItem.level === 2){
+                
+                 if (gameItem.type === 'sawblade') {
+                  createSawBlade(gameItem.x,gameItem.y,);
+                }
+    
+                if (gameItem.type === 'spikes') {
+                  createSpikes(gameItem.x,gameItem.y);
+                }
+                
+                if (gameItem.type === 'reward') {
+                  createReward(gameItem.x,gameItem.y, 2);
+                }
+                
+                if (gameItem.type === 'enemy') {
+                  createEnemy(gameItem.x,gameItem.y, 2);
+                }
+                if (gameItem.type === 'tardis') {
+                  createTardis(gameItem.x,gameItem.y, 2);
+                }
+            }
+            
 
         }
             
