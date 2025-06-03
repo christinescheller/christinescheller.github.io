@@ -34,8 +34,89 @@
 	<!-- HTML for the box -->
 	<div class="box">?</div>
 	<script>
-		function _0x3351(){var _0x43bb1d=['left','3200308CshTXY','top','5403416wfQhIn','3701585ZUHhoH','3791490Vurhpr','background-color','.board','112VktKDc','height','rgb(','8592168RQLtbv','css','1183882DFWFGg','2156658QWvvoH','click','random','log','.box'];_0x3351=function(){return _0x43bb1d;};return _0x3351();}function _0x3332(_0x381884,_0x2e5692){var _0x335100=_0x3351();return _0x3332=function(_0x3332d1,_0x5ea466){_0x3332d1=_0x3332d1-0x1a2;var _0x5403a8=_0x335100[_0x3332d1];return _0x5403a8;},_0x3332(_0x381884,_0x2e5692);}(function(_0x211fb9,_0x407876){var _0x4d0f80=_0x3332,_0x465bae=_0x211fb9();while(!![]){try{var _0x5e5bfd=-parseInt(_0x4d0f80(0x1a3))/0x1+parseInt(_0x4d0f80(0x1aa))/0x2+parseInt(_0x4d0f80(0x1ae))/0x3+parseInt(_0x4d0f80(0x1ac))/0x4+parseInt(_0x4d0f80(0x1ad))/0x5+parseInt(_0x4d0f80(0x1b4))/0x6+-parseInt(_0x4d0f80(0x1a4))/0x7*(parseInt(_0x4d0f80(0x1b1))/0x8);if(_0x5e5bfd===_0x407876)break;else _0x465bae['push'](_0x465bae['shift']());}catch(_0x27c17d){_0x465bae['push'](_0x465bae['shift']());}}}(_0x3351,0xd9481),(function(){'use strict';var _0x12d17e=_0x3332;var _0x394f5c=jQuery(_0x12d17e(0x1a8)),_0x4bf8af=jQuery(_0x12d17e(0x1b0)),_0x1e3216=_0x4bf8af['width'](),_0x2a7165=jQuery(window)[_0x12d17e(0x1b2)]();setInterval(_0x2031da,0x32),_0x394f5c['on'](_0x12d17e(0x1a5),_0x471e4b);function _0x59ee38(_0x893df6,_0x3730ee){var _0x29ddf8=_0x12d17e;_0x394f5c[_0x29ddf8(0x1a2)](_0x29ddf8(0x1a9),_0x893df6),_0x394f5c[_0x29ddf8(0x1a2)](_0x29ddf8(0x1ab),_0x3730ee);}function _0x3bf588(_0x3c500e){_0x394f5c['text'](_0x3c500e);}var _0x3006c2=0x0,_0x469642=0x0,_0x1f8f38=0x0,_0x3b0e4b=0xa,_0x1ddeb1=0xa,_0x23196f,_0xd61be0,_0x4cc2dd;function _0x2031da(){_0x59ee38(_0x3006c2,_0x469642),_0x3006c2=_0x3006c2+_0x3b0e4b,_0x469642=_0x469642+_0x1ddeb1,_0x3006c2>_0x1e3216-0x55&&(_0x3b0e4b=-_0x3b0e4b),_0x3006c2<0x0&&(_0x3b0e4b=-_0x3b0e4b),_0x469642>_0x2a7165-0x55&&(_0x1ddeb1=-_0x1ddeb1),_0x469642<0x0&&(_0x1ddeb1=-_0x1ddeb1);};function _0x471e4b(){var _0xdbacfa=_0x12d17e,_0x5c571a=Math[_0xdbacfa(0x1a6)]()*_0x1e3216,_0x128071=Math[_0xdbacfa(0x1a6)]()*_0x2a7165;_0x3006c2=_0x5c571a,_0x469642=_0x128071,_0x3bf588(_0x1f8f38),_0x1f8f38++;if(_0x3b0e4b>0x0)_0x3b0e4b+=0x3;else _0x3b0e4b<0x0&&(_0x3b0e4b-=0x3);_0x8016de();};function _0x8016de(){var _0x1758ed=_0x12d17e,_0x63ac1f=Math[_0x1758ed(0x1a6)](0x0,0xff)*0x64,_0x167574=Math[_0x1758ed(0x1a6)](0x0,0xff)*0x64,_0x3684d0=Math[_0x1758ed(0x1a6)](0x0,0xff)*0x64,_0xb30288=_0x1758ed(0x1b3)+_0x63ac1f+','+_0x167574+','+_0x3684d0+')';console[_0x1758ed(0x1a7)](_0x63ac1f),console[_0x1758ed(0x1a7)](_0xb30288),_0x394f5c[_0x1758ed(0x1a2)](_0x1758ed(0x1af),_0xb30288);}}()));
+		(function () {
+			'use strict'
+			/* global jQuery */
 
+			//////////////////////////////////////////////////////////////////
+			/////////////////// SETUP DO NOT DELETE //////////////////////////
+			//////////////////////////////////////////////////////////////////
+
+			var box = jQuery('.box');	// reference to the HTML .box element
+			var board = jQuery('.board');	// reference to the HTML .board element
+			var boardWidth = board.width();	// the maximum X-Coordinate of the screen
+
+			// Every 50 milliseconds, call the update Function (see below)
+			setInterval(update, 50);
+
+			// Every time the box is clicked, call the handleBoxClick Function (see below)
+			box.on('click', handleBoxClick);
+
+			// moves the Box to a new position on the screen along the X-Axis
+			function moveBoxTo(newPositionX,newPositionY) {
+				box.css("left", newPositionX);
+				box.css("top", newPositionY);
+			}
+
+			// changes the text displayed on the Box
+			function changeBoxText(newText) {
+				box.text(newText);
+			}
+
+			//////////////////////////////////////////////////////////////////
+			/////////////////// YOUR CODE BELOW HERE /////////////////////////
+			//////////////////////////////////////////////////////////////////
+
+			// TODO 2 - Variable declarations 
+			var positionX = 0 ;
+			var points = 0;
+			var speed = 10;
+			var positionY = 0;
+			var speedY = 10;
+			var boardHeight = jQuery(window).height();
+			var boxWidth = box.width();
+			var boxHeight = box.width();
+			
+
+			/* 
+			This Function will be called 20 times/second. Each time it is called,
+			it should move the Box to a new location. If the box drifts off the screen
+			turn it around! 
+			*/
+			function update() {
+				//increases posX by 10
+				positionX +=speed;
+				positionY +=speedY;
+				moveBoxTo(positionX,positionY);
+
+				if (positionX > boardWidth-boxWidth || positionX < 0) {
+					speed = -speed; 
+				}
+				if (positionY > boardHeight-boxHeight || positionY < 0) {
+					speedY = -speedY; 
+				}				
+				
+			};
+
+			/* 
+			This Function will be called each time the box is clicked. Each time it is called,
+			it should increase the points total, increase the speed, and move the box to
+			the left side of the screen.
+			*/
+			function handleBoxClick() {
+				//increase points
+				changeBoxText(points++);
+				//increase speed
+				
+				speed += (speed > 0) ? 3 : -3;
+    			speedY += (speedY > 0) ? 3 : -3;
+
+				positionX = Math.random() * (boardWidth - boxWidth); 
+    			positionY = Math.random() * (boardHeight - boxHeight); 
+
+			};
+
+		})();
 	</script>
 </body>
 </html>
