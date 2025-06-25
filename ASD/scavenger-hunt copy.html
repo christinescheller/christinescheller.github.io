@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scavenger Hunt Portal</title>
+  <style>
+    body {
+      background: #000;
+      margin: 0;
+      font-family: monospace;
+      color: #0f0;
+      overflow-x: hidden;
+    }
+    canvas {
+      background: #101010;
+      box-shadow: 0 0 0 2px #191919;
+      display: block;
+      margin: 40px auto 0;
+      width: 400px;
+      height: 58px;
+    }
+    #portal {
+      width: 400px;
+      margin: 20px auto;
+      text-align: center;
+      font-size: 16px;
+      user-select: none;
+      position: relative;
+      z-index: 1;
+    }
+    #messageAbove {
+      margin-bottom: 8px;
+      min-height: 24px;
+    }
+    #inputBox {
+      width: 100%;
+      font-size: 16px;
+      padding: 6px 8px;
+      box-sizing: border-box;
+      background: #111;
+      border: 2px solid #0f0;
+      color: #0f0;
+      outline: none;
+      text-align: center;
+    }
+    #errorMessage {
+      display: none;
+      margin-top: 15px;
+      color: #f00;
+      font-weight: bold;
+      text-align: center;
+    }
+    #errorMessage img {
+      height: 160px;
+      display: block;
+      margin: 0 auto 10px;
+    }
+    #errorHint {
+      margin-top: 5px;
+      color: #f00;
+      font-size: 14px;
+      white-space: pre-line;
+    }
+    #confettiCanvas {
+      position: fixed;
+      pointer-events: none;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 9998;
+      display: none;
+    }
+    #congratsMessage {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+      color: #0f0;
+      font-family: monospace;
+      font-size: 32px;
+      font-weight: bold;
+      text-align: center;
+      user-select: none;
+      z-index: 9999;
+      background: rgba(0,0,0,0.75);
+      padding: 30px 50px;
+      border: 3px solid #0f0;
+      border-radius: 12px;
+    }
+    #congratsMessage .line1 {
+      font-size: 36px;
+      margin-bottom: 12px;
+    }
+    #congratsMessage .line2 {
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="matrixCanvas"></canvas>
+
+<div id="portal">
+  <div id="messageAbove">ACCESS CODE</div>
+  <input type="text" id="inputBox" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+  <div id="errorMessage">
+    <img src="https://media.tenor.com/rSnbk9zDc3MAAAAj/m-you-didnt-say-the-magic-word.gif" alt="Try again" />
+    <div>Try again!</div>
+    <div id="errorHint"></div>
+  </div>
+</div>
+
+<canvas id="confettiCanvas"></canvas>
+<div id="congratsMessage">
+  <div class="line1">Congratulations!</div>
+  <div class="line2">You completed the scavenger hunt!</div>
+</div>
+
+<script>
+(() => {
+  const canvas = document.getElementById("matrixCanvas");
+  const ctx = canvas.getContext("2d");
+  const cw = (canvas.width = 400);
+  const ch = (canvas.height = 58);
+
+  ctx.font = "normal 16px monospace";
+  ctx.textAlign = "left";
+  ctx.textBaseline = "top";
+  ctx.fillStyle = "#0f0";
+  ctx.shadowColor = "#3f3";
+
+  const lockedMessages = ["π", "", "", "ENTER THE ACCESS CODE"];
+  const unlockedMessages = ["π Good luck π"];
+  const cursorArray = ["", "█", "█", "█", "█", "█", "█", "█", "█", "█", "█"];
+
+  let page = 0;
+  let messageArray = lockedMessages[page].split('');
+  let messageLength = messageArray.length;
+  let pointer = 0;
+  let typeTick = 0;
+  let typeTickMax = 0;
+  const minTick = 5;
+  const maxTick = 30;
+  let typeResetTick = 0;
+  const typeResetMax = 200;
+  let startTime = null;
+  let endTime = null;
+  let wrongAttempts = {};
+
+  let accessGranted = false;
+
+  const questionsAll = [
+    "What keyword is used to declare a variable in JavaScript?",
+    "What symbol ends most JavaScript statements?",
+    "What symbol starts a single-line comment in JavaScript?",
+    "What do you call a group of characters in quotes in JavaScript?",
+    "What keyword shows something in the console?",
+    "What keyword lets you make something happen only if a condition is true?",
+    "What keyword creates a function?",
+    "What is your teacher's last name?",
+    "What's your teacher’s favorite movie?",
+    "What’s Northshore High’s mascot?",
+    "What file extension do JavaScript files use?",
+    "What symbol do you use to group code together in a function or if statement?",
+    "What symbols do you use to define an array?",
+    "What symbols do you use to define an object?",
+    "What do you call a value that's either true or false?",
+    "What keyword is used to return a value in a function?",
+    "What is the result of \"5\" + \"5\" in JavaScript?",
+    "What operator means 'equals exactly' in value and type?",
+    "What method adds something to the end of an array?",
+    "What keyword starts a loop that runs a set number of times?",
+    "What property can we access in order to get the number of elements contained within an array?",
+    "What data type does a Comparison Operator produce?",
+    "CSS uses which tags?",
+    "What does CSS stand for?",
+    "What kind of data types are arrays?",
+    "What do you call the input data that you provide to a function during a function call?",
+    "What do you call the placeholder used in a function definition?"
+  ];
+
+  const answersAll = [
+    "var", ";", "//", "string", "console.log", "if", "function",
+    "scheller", "et", "panther", ".js", "{}", "[]", "{}", "boolean",
+    "return", "55", "===", ".push", "for",
+    ".length", "boolean", "<style>", "cascading style sheets", "complex", "arguments", "parameter"
+  ];
+
+  const shuffled = questionsAll.map((q, i) => ({ q, a: answersAll[i] }))
+    .sort(() => Math.random() - 0.5);
+  const questions = shuffled.map(q => q.q);
+  const answers = shuffled.map(q => q.a);
+
+  const inputBox = document.getElementById("inputBox");
+  const messageAbove = document.getElementById("messageAbove");
+  const errorDiv = document.getElementById("errorMessage");
+  const errorHintDiv = document.getElementById("errorHint");
+  const congratsMessage = document.getElementById("congratsMessage");
+
+  let errorTimeoutId = null;
+
+  function showErrorMessage(hint = "", duration = 3000) {
+    errorHintDiv.textContent = hint;
+    errorDiv.style.display = "block";
+    if (errorTimeoutId) clearTimeout(errorTimeoutId);
+    errorTimeoutId = setTimeout(() => {
+      errorDiv.style.display = "none";
+      errorHintDiv.textContent = "";
+      errorTimeoutId = null;
+    }, duration);
+  }
+
+  function handleAnswer(input) {
+    const raw = input.trim().toLowerCase();
+    const correctRaw = answers[currentQuestion];
+    const correct = correctRaw.trim().toLowerCase();
+
+    const symbolQuestions = [
+      "What symbol ends most JavaScript statements?",
+      "What symbol starts a single-line comment in JavaScript?",
+      "What symbol do you use to group code together in a function or if statement?",
+      "What symbols do you use to define an array?",
+      "What symbols do you use to define an object?"
+    ];
+
+    if (symbolQuestions.includes(questions[currentQuestion])) {
+      const rawNoSpaces = raw.replace(/\s/g, "");
+      const correctNoSpaces = correct.replace(/\s/g, "");
+      return rawNoSpaces === correctNoSpaces;
+    }
+
+    if (questions[currentQuestion].includes("single-line comment") && raw === "/*") {
+      showErrorMessage("That's for multi-line comments. Try the single-line version.");
+      return false;
+    }
+
+    if (correct === "console.log") {
+      const cleaned = input.trim().replace(/\s/g, '').replace(/;$/, '');
+      return cleaned === "console.log" || cleaned === "console.log()";
+    }
+
+    if (correct === ".push") {
+      const cleaned = input.trim().replace(/\s/g, '');
+      return [".push", ".push()", ".push();"].includes(cleaned);
+    }
+
+    if (questions[currentQuestion].includes('"5" + "5"')) {
+      return input.trim() === '"55"';
+    }
+
+
+
+    if (correct === ".length") {
+      return raw.replace(/\s/g, "") === ".length";
+    }
+
+    if (correct === "<style>") {
+      const tagPattern = /<style>?<\/?style?>?/i;
+      return tagPattern.test(input.trim());
+    }
+
+    if (correct === "arguments") {
+      return ["argument", "arguments"].includes(raw);
+    }
+
+    if (correct === "parameter") {
+      return ["parameter", "parameters"].includes(raw);
+    }
+
+    if (correct === "cascading style sheets") {
+      return raw.replace(/\s+/g, "") === "cascadingstylesheets";
+    }
+
+    if (correct === "et") {
+      const cleaned = raw.replace(/\./g, '').toLowerCase();
+      return cleaned === "et";
+    }
+
+    return raw === correct;
+  }
+
+  let currentQuestion = -1;
+
+  function showQuestion() {
+    if (currentQuestion < 0) return;
+    messageAbove.style.display = "block";
+    messageAbove.textContent = questions[currentQuestion];
+    inputBox.value = "";
+    inputBox.focus();
+  }
+
+  inputBox.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    const val = inputBox.value;
+
+    if (!accessGranted) {
+      const expected = "grace hopper";
+      const normVal = val.trim().toLowerCase().replace(/\s+/g, ' ');
+      if (normVal === expected) {
+        if (errorTimeoutId) {
+          clearTimeout(errorTimeoutId);
+          errorTimeoutId = null;
+        }
+        errorDiv.style.display = "none";
+        errorHintDiv.textContent = "";
+
+        accessGranted = true;
+        startTime = performance.now();  // Start timer
+        messageArray = unlockedMessages[0].split('');
+        messageLength = messageArray.length;
+        pointer = 0;
+        currentQuestion = 0;
+        showQuestion();
+
+      } else {
+        const expectedNoSpaces = expected.replace(/\s/g, '');
+        const userNoSpaces = normVal.replace(/\s/g, '');
+
+        let correctPieces = [];
+        for (let i = 0; i < expectedNoSpaces.length; i++) {
+          const userChar = userNoSpaces[i] || '';
+          const expectedChar = expectedNoSpaces[i];
+          correctPieces.push(userChar === expectedChar ? `✅ Puzzle ${i + 1}` : `❌ Puzzle ${i + 1}`);
+        }
+
+        const line1 = correctPieces.slice(0, 5).join(' | ');
+        const line2 = correctPieces.slice(5).join(' | ');
+
+        showErrorMessage(line1 + '\n' + line2, 10000);
+      }
+      return;
+    }
+
+    if (handleAnswer(val)) {
+      if (errorTimeoutId) {
+        clearTimeout(errorTimeoutId);
+        errorTimeoutId = null;
+      }
+      errorDiv.style.display = "none";
+      errorHintDiv.textContent = "";
+
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        messageAbove.style.display = "none";
+        inputBox.style.display = "none";
+        inputBox.disabled = true;
+        endTime = performance.now(); // End timer
+
+        const elapsedMs = endTime - startTime;
+        const totalSeconds = Math.floor(elapsedMs / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        const millis = Math.floor(elapsedMs % 1000);
+
+        document.querySelector('#congratsMessage .line2').textContent = 
+          `You completed the scavenger hunt in ${minutes}m ${seconds}s ${millis}ms`;
+
+        congratsMessage.style.display = "block";
+        startConfetti();
+
+      }
+    } else {
+          const currentQText = questions[currentQuestion];
+      wrongAttempts[currentQText] = (wrongAttempts[currentQText] || 0) + 1;
+
+      if (
+        currentQText.includes("favorite movie") &&
+        wrongAttempts[currentQText] >= 3
+      ) {
+        showErrorMessage("Hint: It's directed by Steven Spielberg");
+      } else {
+        showErrorMessage();
+      }
+    }
+  });
+
+  function updateTypeTick() {
+    const msgs = accessGranted ? unlockedMessages : lockedMessages;
+    if (pointer < messageLength) {
+      if (typeTick++ >= typeTickMax) {
+        typeTick = 0;
+        pointer++;
+        typeTickMax = Math.floor(Math.random() * maxTick + minTick);
+      }
+    } else if (typeResetTick++ >= typeResetMax) {
+      typeResetTick = 0;
+      pointer = 0;
+      page = (page + 1) % msgs.length;
+      messageArray = msgs[page].split('');
+      messageLength = messageArray.length;
+    }
+  }
+
+  function renderMessage() {
+    const text = messageArray.slice(0, pointer);
+    text[pointer] = cursorArray[page];
+    ctx.clearRect(0, 0, cw, ch);
+    ctx.shadowBlur = 9;
+    ctx.fillText(text.join(""), 20, 20);
+    ctx.shadowBlur = 0;
+    renderLines();
+  }
+
+  function renderLines() {
+    ctx.beginPath();
+    ctx.strokeStyle = "rgba(0, 255, 0, 0.25)";
+    for (let i = 0; i < cw; i += 10) ctx.moveTo(i, 0), ctx.lineTo(i, ch);
+    for (let i = 0; i < ch; i += 10) ctx.moveTo(0, i), ctx.lineTo(cw, i);
+    ctx.stroke();
+  }
+
+  function animate() {
+    updateTypeTick();
+    renderMessage();
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+
+  const confettiCanvas = document.getElementById("confettiCanvas");
+  const confettiCtx = confettiCanvas.getContext("2d");
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+
+  let confettiParticles = [];
+  const confettiCount = 150;
+  const colors = ['#0f0', '#3f3', '#0c0', '#6f6', '#0a0'];
+
+  class ConfettiParticle {
+    constructor() {
+      this.x = Math.random() * confettiCanvas.width;
+      this.y = Math.random() * confettiCanvas.height - confettiCanvas.height;
+      this.size = (Math.random() * 6) + 4;
+      this.speed = (Math.random() * 3) + 2;
+      this.angle = Math.random() * 2 * Math.PI;
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+      this.tilt = Math.random() * 10 - 10;
+      this.tiltSpeed = Math.random() * 0.1 + 0.05;
+    }
+    update() {
+      this.y += this.speed;
+      this.angle += this.tiltSpeed;
+      this.tilt = Math.sin(this.angle) * 15;
+      if (this.y > confettiCanvas.height) {
+        this.y = -this.size;
+        this.x = Math.random() * confettiCanvas.width;
+      }
+    }
+    draw(ctx) {
+      ctx.beginPath();
+      ctx.lineWidth = this.size / 2;
+      ctx.strokeStyle = this.color;
+      ctx.moveTo(this.x + this.tilt, this.y);
+      ctx.lineTo(this.x + this.tilt + this.size / 2, this.y + this.tilt + this.size / 2);
+      ctx.stroke();
+    }
+  }
+
+  function createConfetti() {
+    confettiParticles = [];
+    for (let i = 0; i < confettiCount; i++) {
+      confettiParticles.push(new ConfettiParticle());
+    }
+  }
+
+  function drawConfetti() {
+    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+    confettiParticles.forEach(p => {
+      p.update();
+      p.draw(confettiCtx);
+    });
+  }
+
+  let confettiActive = false;
+
+  function startConfetti() {
+    if (confettiActive) return;
+    confettiActive = true;
+    confettiCanvas.style.display = "block";
+    createConfetti();
+    function confettiLoop() {
+      if (!confettiActive) return;
+      drawConfetti();
+      requestAnimationFrame(confettiLoop);
+    }
+    confettiLoop();
+  }
+
+  window.addEventListener("resize", () => {
+    confettiCanvas.width = window.innerWidth;
+    confettiCanvas.height = window.innerHeight;
+  });
+})();
+</script>
+
+</body>
+</html>
