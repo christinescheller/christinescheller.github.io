@@ -279,28 +279,26 @@
       const congratsMessage = document.getElementById("congratsMessage");
 
       let errorTimeoutId = null;
-      let hasPlayedTryAgainSound = false;
-
       function showErrorMessage(hint = "", duration = 3000) {
-        const errorAudio = document.getElementById("tryAgainSound");
+      const errorAudio = document.getElementById("tryAgainSound");
 
-        if (!hasPlayedTryAgainSound && errorAudio) {
-          errorAudio.play().catch(err => {
-            console.warn("Autoplay blocked:", err);
-          });
-          hasPlayedTryAgainSound = true;
-        }
-
-        errorHintDiv.textContent = hint;
-        errorDiv.style.display = "block";
-
-        if (errorTimeoutId) clearTimeout(errorTimeoutId);
-        errorTimeoutId = setTimeout(() => {
-          errorDiv.style.display = "none";
-          errorHintDiv.textContent = "";
-          errorTimeoutId = null;
-        }, duration);
+      if (errorAudio) {
+        errorAudio.currentTime = 0; // restart the sound each time
+        errorAudio.play().catch(err => {
+          console.warn("Autoplay blocked:", err);
+        });
       }
+
+      errorHintDiv.textContent = hint;
+      errorDiv.style.display = "block";
+
+      if (errorTimeoutId) clearTimeout(errorTimeoutId);
+      errorTimeoutId = setTimeout(() => {
+        errorDiv.style.display = "none";
+        errorHintDiv.textContent = "";
+        errorTimeoutId = null;
+      }, duration);
+    }
 
 
       function handleAnswer(input) {
