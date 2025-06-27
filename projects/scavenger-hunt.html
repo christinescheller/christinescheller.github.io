@@ -106,562 +106,101 @@
     }
   </style>
 </head>
-<body>
-<audio id="tryAgainSound" src="../projects/sh-assets/try-again.mp3" preload="auto"></audio>
-<canvas id="matrixCanvas"></canvas>
+  <body>
+    <audio id="tryAgainSound" src="../projects/sh-assets/try-again.mp3" preload="auto"></audio>
+    <canvas id="matrixCanvas"></canvas>
 
-<div id="portal">
-  <div id="messageAbove">ACCESS CODE</div>
-  <input type="text" id="inputBox" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-  <div id="errorMessage">
-    <img src="../projects/sh-assets/m-you-didnt-say-the-magic-word.gif" alt="Try again" />
-    <div>Try again!</div>
-    <div id="errorHint"></div>
-  </div>
-</div>
-
-<div id="puzzleScreen" style="display:none; margin-top: 40px; text-align: center;">
-  <h2>Access Code Puzzle</h2>
-
-  <div id="puzzleLayout" style="display: flex; justify-content: center; align-items: flex-start; gap: 40px; flex-wrap: wrap;">
-
-    <!-- Puzzle Inputs -->
-    <div id="puzzleInputs" style="display: flex; flex-direction: column; align-items: center;">
-      <div id="topRow" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
-        <!-- Top row: GRACE -->
-        <script>
-          for (let i = 1; i <= 5; i++) {
-            document.write(`
-              <div style="display: flex; flex-direction: column; align-items: center; width: 50px;">
-                <div style="color:#0f0; margin-bottom: 5px;">${i}</div>
-                <input class="cipher-input" maxlength="2" style="width: 40px; text-align: center;" placeholder="##" />
-                <input class="letter-input" maxlength="1" style="width: 40px; text-align: center; margin-top: 5px;" placeholder="A" />
-              </div>
-            `);
-          }
-        </script>
-      </div>
-
-      <div id="bottomRow" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
-        <!-- Bottom row: HOPPER -->
-        <script>
-          for (let i = 6; i <= 11; i++) {
-            document.write(`
-              <div style="display: flex; flex-direction: column; align-items: center; width: 50px;">
-                <div style="color:#0f0; margin-bottom: 5px;">${i}</div>
-                <input class="cipher-input" maxlength="2" style="width: 40px; text-align: center;" placeholder="##" />
-                <input class="letter-input" maxlength="1" style="width: 40px; text-align: center; margin-top: 5px;" placeholder="A" />
-              </div>
-            `);
-          }
-        </script>
-      </div>
-
-      <div style="text-align: center; margin-bottom: 20px;">
-        <button class="green-button" onclick="showCypher()">Toggle Cypher</button>
-        <button class="green-button"onclick="toggleView('portal')">← Back to Access Portal</button>
+    <div id="portal">
+      <div id="messageAbove">ACCESS CODE</div>
+      <input type="text" id="inputBox" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+      <div id="errorMessage">
+        <img src="../projects/sh-assets/m-you-didnt-say-the-magic-word.gif" alt="Try again" />
+        <div>Try again!</div>
+        <div id="errorHint"></div>
       </div>
     </div>
 
-    <!-- Cypher Key (Hidden by default, appears on right) -->
-    <div id="cypherModal" style="display: none; background:#000; color:#0f0; border:2px solid #0f0; padding:20px; width:220px; text-align: center;">
-      <h3>Cypher Key</h3>
-      <p>A = 1, B = 2, ..., Z = 26</p>
-      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;">
-        <script>
-          document.write([...Array(26)].map((_, i) => `<div>${String.fromCharCode(65+i)} = ${i+1}</div>`).join(''));
-        </script>
+    <div id="puzzleScreen" style="display:none; margin-top: 40px; text-align: center;">
+      <h2>Access Code Puzzle</h2>
+
+      <div id="puzzleLayout" style="display: flex; justify-content: center; align-items: flex-start; gap: 40px; flex-wrap: wrap;">
+
+        <!-- Puzzle Inputs -->
+        <div id="puzzleInputs" style="display: flex; flex-direction: column; align-items: center;">
+          <div id="topRow" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+            <!-- Top row: GRACE -->
+            <script>
+              for (let i = 1; i <= 5; i++) {
+                document.write(`
+                  <div style="display: flex; flex-direction: column; align-items: center; width: 50px;">
+                    <div style="color:#0f0; margin-bottom: 5px;">${i}</div>
+                    <input class="cipher-input" maxlength="2" style="width: 40px; text-align: center;" placeholder="##" />
+                    <input class="letter-input" maxlength="1" style="width: 40px; text-align: center; margin-top: 5px;" placeholder="A" />
+                  </div>
+                `);
+              }
+            </script>
+          </div>
+
+          <div id="bottomRow" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+            <!-- Bottom row: HOPPER -->
+            <script>
+              for (let i = 6; i <= 11; i++) {
+                document.write(`
+                  <div style="display: flex; flex-direction: column; align-items: center; width: 50px;">
+                    <div style="color:#0f0; margin-bottom: 5px;">${i}</div>
+                    <input class="cipher-input" maxlength="2" style="width: 40px; text-align: center;" placeholder="##" />
+                    <input class="letter-input" maxlength="1" style="width: 40px; text-align: center; margin-top: 5px;" placeholder="A" />
+                  </div>
+                `);
+              }
+            </script>
+          </div>
+
+          <div style="text-align: center; margin-bottom: 20px;">
+            <button class="green-button" onclick="showCypher()">Toggle Cypher</button>
+            <button class="green-button"onclick="toggleView('portal')">← Back to Access Portal</button>
+          </div>
+        </div>
+
+        <div id="cypherModal" style="display: none; background:#000; color:#0f0; border:2px solid #0f0; padding:20px; width:220px; text-align: center;">
+          <h3>Cypher Key</h3>
+          <p>A = 1, B = 2, ..., Z = 26</p>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;">
+            <script>
+              document.write([...Array(26)].map((_, i) => `<div>${String.fromCharCode(65+i)} = ${i+1}</div>`).join(''));
+            </script>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Image Viewer Section -->
+      <div id="imageViewer" style="margin-top: 30px; display: flex; flex-direction: column; align-items: center;">
+        <img id="puzzleImage" src="" alt="Puzzle Slide" style="max-width: 100%; height: auto; border: 2px solid #0f0; display: none; max-height: 400px;" />
+        <div style="margin-top: 10px;">
+          <button class="green-button" onclick="prevImage()">← Back</button>
+          <button class="green-button" onclick="nextImage()">Next →</button>
+        </div>
       </div>
     </div>
 
-  </div>
 
-  <!-- Image Viewer Section -->
-  <div id="imageViewer" style="margin-top: 30px; display: flex; flex-direction: column; align-items: center;">
-    <img id="puzzleImage" src="" alt="Puzzle Slide" style="max-width: 100%; height: auto; border: 2px solid #0f0; display: none; max-height: 400px;" />
-    <div style="margin-top: 10px;">
-      <button class="green-button" onclick="prevImage()">← Back</button>
-      <button class="green-button" onclick="nextImage()">Next →</button>
+    <div id="navButtons" style="text-align:center; margin-top:20px;">
+      <button class="green-button" onclick="toggleView('puzzle')">Go to Puzzle →</button>
     </div>
-  </div>
-</div>
 
+    <canvas id="confettiCanvas"></canvas>
+    <div id="congratsMessage">
+      <div class="line1">Congratulations!</div>
+      <div class="line2">You completed the scavenger hunt!</div>
+    </div>
 
-<div id="navButtons" style="text-align:center; margin-top:20px;">
-  <button class="green-button" onclick="toggleView('puzzle')">Go to Puzzle →</button>
-</div>
+    <script>
+      const _0x203938=_0x2c3d;(function(_0x57b6f9,_0x123a1b){const _0x534bd2=_0x2c3d,_0x2fc712=_0x57b6f9();while(!![]){try{const _0x4d019e=parseInt(_0x534bd2(0x1e2))/0x1+parseInt(_0x534bd2(0x18a))/0x2*(-parseInt(_0x534bd2(0x1ab))/0x3)+parseInt(_0x534bd2(0x1ca))/0x4+-parseInt(_0x534bd2(0x189))/0x5*(parseInt(_0x534bd2(0x195))/0x6)+-parseInt(_0x534bd2(0x192))/0x7+parseInt(_0x534bd2(0x1e7))/0x8+parseInt(_0x534bd2(0x1c3))/0x9*(parseInt(_0x534bd2(0x15c))/0xa);if(_0x4d019e===_0x123a1b)break;else _0x2fc712['push'](_0x2fc712['shift']());}catch(_0x6f0727){_0x2fc712['push'](_0x2fc712['shift']());}}}(_0xaf57,0xd59c4),((()=>{const _0x1637dc=_0x2c3d,_0x39cf10=document[_0x1637dc(0x1d5)](_0x1637dc(0x179)),_0x30b42f=_0x39cf10[_0x1637dc(0x161)]('2d'),_0x2a4759=_0x39cf10['width']=0x190,_0x362c95=_0x39cf10['height']=0x3a;_0x30b42f[_0x1637dc(0x15e)]=_0x1637dc(0x1b7),_0x30b42f['textAlign']=_0x1637dc(0x16b),_0x30b42f[_0x1637dc(0x17c)]='top',_0x30b42f['fillStyle']=_0x1637dc(0x16f),_0x30b42f[_0x1637dc(0x1a8)]='#3f3';const _0x519f48=['π','','',_0x1637dc(0x1b9)],_0x550e02=[_0x1637dc(0x1a4)],_0x3ae7e9=['','█','█','█','█','█','█','█','█','█','█'];let _0x3e419a=0x0,_0x1b303b=_0x519f48[_0x3e419a][_0x1637dc(0x1d9)](''),_0x1ee11b=_0x1b303b['length'],_0x573f01=0x0,_0x26740f=0x0,_0x3e67cc=0x0;const _0x5ccc6a=0x5,_0x370ab9=0x1e;let _0x482261=0x0;const _0xe435b6=0xc8;let _0x885def=null,_0x31673b=null,_0x511b0d={},_0x242d30=![];const _0x1907ae=[_0x1637dc(0x168),_0x1637dc(0x1b6),_0x1637dc(0x1b5),'What\x20do\x20you\x20call\x20a\x20group\x20of\x20characters\x20in\x20quotes\x20in\x20JavaScript?',_0x1637dc(0x1c5),_0x1637dc(0x1cf),_0x1637dc(0x18c),'What\x20is\x20your\x20teacher\x27s\x20last\x20name?',_0x1637dc(0x159),'What’s\x20Northshore\x20High’s\x20mascot?',_0x1637dc(0x1a6),_0x1637dc(0x1c7),_0x1637dc(0x1af),_0x1637dc(0x1be),_0x1637dc(0x160),'What\x20keyword\x20is\x20used\x20to\x20return\x20a\x20value\x20in\x20a\x20function?','What\x20is\x20the\x20result\x20of\x20\x225\x22\x20+\x20\x225\x22\x20in\x20JavaScript?',_0x1637dc(0x1cb),_0x1637dc(0x153),_0x1637dc(0x186),_0x1637dc(0x164),_0x1637dc(0x175),'CSS\x20uses\x20which\x20tags?',_0x1637dc(0x1b8),'What\x20kind\x20of\x20data\x20types\x20are\x20arrays?',_0x1637dc(0x19c),_0x1637dc(0x1c4)],_0x4c27dd=[_0x1637dc(0x1ac),';','//','string',_0x1637dc(0x176),'if',_0x1637dc(0x15b),_0x1637dc(0x166),'et','panther','.js','{}','[]','{}',_0x1637dc(0x1b0),_0x1637dc(0x16d),'55',_0x1637dc(0x1ae),_0x1637dc(0x1e3),_0x1637dc(0x1c8),_0x1637dc(0x1e6),_0x1637dc(0x1b0),'<style>',_0x1637dc(0x17b),_0x1637dc(0x165),_0x1637dc(0x190),_0x1637dc(0x19d)],_0x526c45=_0x1907ae[_0x1637dc(0x1b2)]((_0x474a1e,_0x2764b8)=>({'q':_0x474a1e,'a':_0x4c27dd[_0x2764b8]}))[_0x1637dc(0x1e5)](()=>Math['random']()-0.5),_0x4355a0=_0x526c45['map'](_0x39aadb=>_0x39aadb['q']),_0x7d47ef=_0x526c45[_0x1637dc(0x1b2)](_0x46635e=>_0x46635e['a']),_0x109f51=document[_0x1637dc(0x1d5)](_0x1637dc(0x1a0)),_0x15f396=document[_0x1637dc(0x1d5)](_0x1637dc(0x1d7)),_0x8385fe=document['getElementById'](_0x1637dc(0x1d8)),_0x47296b=document[_0x1637dc(0x1d5)]('errorHint'),_0x57c88f=document['getElementById'](_0x1637dc(0x18b));let _0x397632=null,_0x570b96=![];function _0x1944a4(_0x4df84e='',_0x298f36=0xbb8){const _0x33a69b=_0x1637dc,_0x2a82ee=document['getElementById'](_0x33a69b(0x157));!_0x570b96&&_0x2a82ee&&(_0x2a82ee['play']()[_0x33a69b(0x1df)](_0x5d3fe3=>{const _0x503ebd=_0x33a69b;console[_0x503ebd(0x19b)]('Autoplay\x20blocked:',_0x5d3fe3);}),_0x570b96=!![]);_0x47296b[_0x33a69b(0x162)]=_0x4df84e,_0x8385fe[_0x33a69b(0x19f)][_0x33a69b(0x16a)]='block';if(_0x397632)clearTimeout(_0x397632);_0x397632=setTimeout(()=>{const _0x49ae0e=_0x33a69b;_0x8385fe[_0x49ae0e(0x19f)][_0x49ae0e(0x16a)]=_0x49ae0e(0x1c2),_0x47296b[_0x49ae0e(0x162)]='',_0x397632=null;},_0x298f36);}function _0x493679(_0x328333){const _0x3c1590=_0x1637dc,_0x2c4ba7=_0x328333[_0x3c1590(0x16c)]()[_0x3c1590(0x1d0)](),_0x251b1e=_0x7d47ef[_0x5885d6],_0x415bdf=_0x251b1e[_0x3c1590(0x16c)]()[_0x3c1590(0x1d0)](),_0x294d69=[_0x3c1590(0x1b6),_0x3c1590(0x1b5),'What\x20symbol\x20do\x20you\x20use\x20to\x20group\x20code\x20together\x20in\x20a\x20function\x20or\x20if\x20statement?',_0x3c1590(0x1af),_0x3c1590(0x1be)];if(_0x294d69[_0x3c1590(0x177)](_0x4355a0[_0x5885d6])){const _0x5d9650=_0x2c4ba7[_0x3c1590(0x18d)](/\s/g,''),_0x13d96a=_0x415bdf[_0x3c1590(0x18d)](/\s/g,'');return _0x5d9650===_0x13d96a;}if(_0x4355a0[_0x5885d6][_0x3c1590(0x177)](_0x3c1590(0x184))&&_0x2c4ba7==='/*')return _0x1944a4(_0x3c1590(0x1c1)),![];if(_0x415bdf===_0x3c1590(0x176)){const _0x10c966=_0x328333['trim']()['replace'](/\s/g,'')[_0x3c1590(0x18d)](/;$/,'');return _0x10c966===_0x3c1590(0x176)||_0x10c966===_0x3c1590(0x1bb);}if(_0x415bdf===_0x3c1590(0x1e3)){const _0xf5b788=_0x328333['trim']()[_0x3c1590(0x18d)](/\s/g,'');return[_0x3c1590(0x1e3),_0x3c1590(0x1bf),_0x3c1590(0x15a)]['includes'](_0xf5b788);}if(_0x4355a0[_0x5885d6]['includes'](_0x3c1590(0x1c9)))return _0x328333[_0x3c1590(0x16c)]()===_0x3c1590(0x1de);if(_0x415bdf==='.length')return _0x2c4ba7[_0x3c1590(0x18d)](/\s/g,'')===_0x3c1590(0x1e6);if(_0x415bdf===_0x3c1590(0x16e)){const _0x4369fd=/<style>?<\/?style?>?/i;return _0x4369fd[_0x3c1590(0x1c0)](_0x328333[_0x3c1590(0x16c)]());}if(_0x415bdf===_0x3c1590(0x190))return[_0x3c1590(0x1da),_0x3c1590(0x190)][_0x3c1590(0x177)](_0x2c4ba7);if(_0x415bdf==='parameter')return[_0x3c1590(0x19d),_0x3c1590(0x17a)][_0x3c1590(0x177)](_0x2c4ba7);if(_0x415bdf===_0x3c1590(0x17b))return _0x2c4ba7[_0x3c1590(0x18d)](/\s+/g,'')==='cascadingstylesheets';if(_0x415bdf==='et'){const _0x27c519=_0x2c4ba7['replace'](/\./g,'')[_0x3c1590(0x1d0)]();return _0x27c519==='et';}return _0x2c4ba7===_0x415bdf;}let _0x5885d6=-0x1;function _0x20535a(){const _0x13c86f=_0x1637dc;if(_0x5885d6<0x0)return;_0x15f396[_0x13c86f(0x19f)][_0x13c86f(0x16a)]=_0x13c86f(0x172),_0x15f396[_0x13c86f(0x162)]=_0x4355a0[_0x5885d6],_0x109f51['value']='',_0x109f51[_0x13c86f(0x156)]();}_0x109f51[_0x1637dc(0x187)](_0x1637dc(0x1d1),_0x5f584c=>{const _0x4d6b06=_0x1637dc;if(_0x5f584c[_0x4d6b06(0x1a5)]!==_0x4d6b06(0x181))return;const _0xee2772=_0x109f51[_0x4d6b06(0x188)];if(!_0x242d30){const _0x2e1652=_0x4d6b06(0x171),_0x179ece=_0xee2772[_0x4d6b06(0x16c)]()[_0x4d6b06(0x1d0)]()[_0x4d6b06(0x18d)](/\s+/g,'\x20');if(_0x179ece===_0x2e1652)_0x397632&&(clearTimeout(_0x397632),_0x397632=null),_0x8385fe[_0x4d6b06(0x19f)][_0x4d6b06(0x16a)]=_0x4d6b06(0x1c2),_0x47296b[_0x4d6b06(0x162)]='',_0x242d30=!![],document['getElementById'](_0x4d6b06(0x155))[_0x4d6b06(0x19f)]['display']=_0x4d6b06(0x1c2),_0x885def=performance[_0x4d6b06(0x1db)](),_0x1b303b=_0x550e02[0x0][_0x4d6b06(0x1d9)](''),_0x1ee11b=_0x1b303b[_0x4d6b06(0x183)],_0x573f01=0x0,_0x5885d6=0x0,_0x20535a();else{const _0x4e89c5=_0x2e1652['replace'](/\s/g,''),_0x191c47=_0x179ece['replace'](/\s/g,'');let _0x374db7=[];for(let _0x31d31b=0x0;_0x31d31b<_0x4e89c5[_0x4d6b06(0x183)];_0x31d31b++){const _0x473c80=_0x191c47[_0x31d31b]||'',_0x21aa7b=_0x4e89c5[_0x31d31b];_0x374db7[_0x4d6b06(0x15f)](_0x473c80===_0x21aa7b?'✅\x20Puzzle\x20'+(_0x31d31b+0x1):'❌\x20Puzzle\x20'+(_0x31d31b+0x1));}const _0x461a86=_0x374db7['slice'](0x0,0x5)[_0x4d6b06(0x180)](_0x4d6b06(0x1bc)),_0x49e5d6=_0x374db7['slice'](0x5)[_0x4d6b06(0x180)]('\x20|\x20');_0x1944a4(_0x461a86+'\x0a'+_0x49e5d6,0x2710);}return;}if(_0x493679(_0xee2772)){_0x397632&&(clearTimeout(_0x397632),_0x397632=null);_0x8385fe['style'][_0x4d6b06(0x16a)]=_0x4d6b06(0x1c2),_0x47296b[_0x4d6b06(0x162)]='',_0x5885d6++;if(_0x5885d6<_0x4355a0['length'])_0x20535a();else{_0x15f396[_0x4d6b06(0x19f)][_0x4d6b06(0x16a)]=_0x4d6b06(0x1c2),_0x109f51[_0x4d6b06(0x19f)]['display']=_0x4d6b06(0x1c2),_0x109f51[_0x4d6b06(0x178)]=!![],_0x31673b=performance[_0x4d6b06(0x1db)]();const _0x30cb77=_0x31673b-_0x885def,_0x5e82eb=Math[_0x4d6b06(0x19a)](_0x30cb77/0x3e8),_0x296d56=Math['floor'](_0x5e82eb/0x3c),_0x533870=_0x5e82eb%0x3c,_0x415cbd=Math[_0x4d6b06(0x19a)](_0x30cb77%0x3e8);document[_0x4d6b06(0x1b1)](_0x4d6b06(0x1d4))[_0x4d6b06(0x162)]='You\x20completed\x20the\x20scavenger\x20hunt\x20in\x20'+_0x296d56+'m\x20'+_0x533870+'s\x20'+_0x415cbd+'ms',_0x57c88f[_0x4d6b06(0x19f)][_0x4d6b06(0x16a)]=_0x4d6b06(0x172),_0x3d831d();}}else{const _0x59f31=_0x4355a0[_0x5885d6];_0x511b0d[_0x59f31]=(_0x511b0d[_0x59f31]||0x0)+0x1,_0x59f31['includes'](_0x4d6b06(0x19e))&&_0x511b0d[_0x59f31]>=0x3?_0x1944a4('Hint:\x20It\x27s\x20directed\x20by\x20Steven\x20Spielberg'):_0x1944a4();}});function _0x3bb99c(){const _0x243aa9=_0x1637dc,_0x4f5f4d=_0x242d30?_0x550e02:_0x519f48;if(_0x573f01<_0x1ee11b)_0x26740f++>=_0x3e67cc&&(_0x26740f=0x0,_0x573f01++,_0x3e67cc=Math[_0x243aa9(0x19a)](Math['random']()*_0x370ab9+_0x5ccc6a));else _0x482261++>=_0xe435b6&&(_0x482261=0x0,_0x573f01=0x0,_0x3e419a=(_0x3e419a+0x1)%_0x4f5f4d[_0x243aa9(0x183)],_0x1b303b=_0x4f5f4d[_0x3e419a][_0x243aa9(0x1d9)](''),_0x1ee11b=_0x1b303b[_0x243aa9(0x183)]);}function _0x3af29c(){const _0x16fdbe=_0x1637dc,_0x3799fb=_0x1b303b[_0x16fdbe(0x1dd)](0x0,_0x573f01);_0x3799fb[_0x573f01]=_0x3ae7e9[_0x3e419a],_0x30b42f[_0x16fdbe(0x18e)](0x0,0x0,_0x2a4759,_0x362c95),_0x30b42f[_0x16fdbe(0x1d2)]=0x9,_0x30b42f[_0x16fdbe(0x1a1)](_0x3799fb[_0x16fdbe(0x180)](''),0x14,0x14),_0x30b42f[_0x16fdbe(0x1d2)]=0x0,_0x542fc1();}function _0x542fc1(){const _0x2cabc4=_0x1637dc;_0x30b42f[_0x2cabc4(0x173)](),_0x30b42f['strokeStyle']=_0x2cabc4(0x182);for(let _0x3a67e4=0x0;_0x3a67e4<_0x2a4759;_0x3a67e4+=0xa)_0x30b42f['moveTo'](_0x3a67e4,0x0),_0x30b42f['lineTo'](_0x3a67e4,_0x362c95);for(let _0x368c91=0x0;_0x368c91<_0x362c95;_0x368c91+=0xa)_0x30b42f[_0x2cabc4(0x17d)](0x0,_0x368c91),_0x30b42f[_0x2cabc4(0x1bd)](_0x2a4759,_0x368c91);_0x30b42f[_0x2cabc4(0x15d)]();}function _0x36b4e0(){_0x3bb99c(),_0x3af29c(),requestAnimationFrame(_0x36b4e0);}_0x36b4e0();const _0x1aa3ef=document[_0x1637dc(0x1d5)](_0x1637dc(0x1c6)),_0x44730c=_0x1aa3ef[_0x1637dc(0x161)]('2d');_0x1aa3ef[_0x1637dc(0x199)]=window[_0x1637dc(0x17f)],_0x1aa3ef[_0x1637dc(0x1e1)]=window['innerHeight'];let _0x346e75=[];const _0x17c392=0x96,_0x14f2da=['#0f0','#3f3',_0x1637dc(0x169),_0x1637dc(0x1b4),_0x1637dc(0x1d6)];class _0x3e6eb6{constructor(){const _0x5a48f0=_0x1637dc;this['x']=Math['random']()*_0x1aa3ef[_0x5a48f0(0x199)],this['y']=Math[_0x5a48f0(0x17e)]()*_0x1aa3ef['height']-_0x1aa3ef[_0x5a48f0(0x1e1)],this[_0x5a48f0(0x197)]=Math[_0x5a48f0(0x17e)]()*0x6+0x4,this[_0x5a48f0(0x1ba)]=Math['random']()*0x3+0x2,this[_0x5a48f0(0x1b3)]=Math['random']()*0x2*Math['PI'],this[_0x5a48f0(0x198)]=_0x14f2da[Math[_0x5a48f0(0x19a)](Math[_0x5a48f0(0x17e)]()*_0x14f2da[_0x5a48f0(0x183)])],this[_0x5a48f0(0x167)]=Math[_0x5a48f0(0x17e)]()*0xa-0xa,this[_0x5a48f0(0x1d3)]=Math['random']()*0.1+0.05;}[_0x1637dc(0x193)](){const _0x10c5e6=_0x1637dc;this['y']+=this['speed'],this[_0x10c5e6(0x1b3)]+=this['tiltSpeed'],this[_0x10c5e6(0x167)]=Math[_0x10c5e6(0x1cc)](this[_0x10c5e6(0x1b3)])*0xf,this['y']>_0x1aa3ef[_0x10c5e6(0x1e1)]&&(this['y']=-this[_0x10c5e6(0x197)],this['x']=Math[_0x10c5e6(0x17e)]()*_0x1aa3ef[_0x10c5e6(0x199)]);}['draw'](_0x2ad345){const _0x79fc6d=_0x1637dc;_0x2ad345[_0x79fc6d(0x173)](),_0x2ad345[_0x79fc6d(0x1e4)]=this[_0x79fc6d(0x197)]/0x2,_0x2ad345['strokeStyle']=this[_0x79fc6d(0x198)],_0x2ad345[_0x79fc6d(0x17d)](this['x']+this[_0x79fc6d(0x167)],this['y']),_0x2ad345[_0x79fc6d(0x1bd)](this['x']+this[_0x79fc6d(0x167)]+this[_0x79fc6d(0x197)]/0x2,this['y']+this[_0x79fc6d(0x167)]+this[_0x79fc6d(0x197)]/0x2),_0x2ad345[_0x79fc6d(0x15d)]();}}function _0x54286f(){const _0x475ee4=_0x1637dc;_0x346e75=[];for(let _0x250212=0x0;_0x250212<_0x17c392;_0x250212++){_0x346e75[_0x475ee4(0x15f)](new _0x3e6eb6());}}function _0x5ce0ad(){const _0x12389c=_0x1637dc;_0x44730c[_0x12389c(0x18e)](0x0,0x0,_0x1aa3ef[_0x12389c(0x199)],_0x1aa3ef[_0x12389c(0x1e1)]),_0x346e75[_0x12389c(0x1a2)](_0x3b96fc=>{const _0x2483a0=_0x12389c;_0x3b96fc[_0x2483a0(0x193)](),_0x3b96fc[_0x2483a0(0x1e9)](_0x44730c);});}let _0x56d6bc=![];function _0x3d831d(){const _0xdc07d0=_0x1637dc;if(_0x56d6bc)return;_0x56d6bc=!![],_0x1aa3ef[_0xdc07d0(0x19f)]['display']=_0xdc07d0(0x172),_0x54286f();function _0x337e38(){if(!_0x56d6bc)return;_0x5ce0ad(),requestAnimationFrame(_0x337e38);}_0x337e38();}window['addEventListener']('resize',()=>{const _0x212139=_0x1637dc;_0x1aa3ef['width']=window[_0x212139(0x17f)],_0x1aa3ef[_0x212139(0x1e1)]=window[_0x212139(0x1e8)];});})()));function _0x2c3d(_0x160b65,_0x212d2c){const _0xaf57b8=_0xaf57();return _0x2c3d=function(_0x2c3d35,_0x2a531f){_0x2c3d35=_0x2c3d35-0x153;let _0x49f515=_0xaf57b8[_0x2c3d35];return _0x49f515;},_0x2c3d(_0x160b65,_0x212d2c);}function toggleView(_0x1836fe){const _0x42a640=_0x2c3d;document[_0x42a640(0x1d5)](_0x42a640(0x1e0))[_0x42a640(0x19f)]['display']=_0x1836fe==='portal'?'block':_0x42a640(0x1c2),document[_0x42a640(0x1d5)](_0x42a640(0x194))[_0x42a640(0x19f)][_0x42a640(0x16a)]=_0x1836fe===_0x42a640(0x170)?_0x42a640(0x172):_0x42a640(0x1c2);const _0x421091=document[_0x42a640(0x1d5)](_0x42a640(0x155));_0x1836fe===_0x42a640(0x170)?_0x421091[_0x42a640(0x19f)][_0x42a640(0x16a)]=_0x42a640(0x1c2):_0x421091[_0x42a640(0x19f)][_0x42a640(0x16a)]=_0x42a640(0x172);}function showCypher(){const _0x1d1e69=_0x2c3d,_0x515900=document[_0x1d1e69(0x1d5)](_0x1d1e69(0x1ce));_0x515900['style']['display']=_0x515900['style'][_0x1d1e69(0x16a)]===_0x1d1e69(0x172)?'none':_0x1d1e69(0x172);}function checkPuzzle(){const _0x169e57=_0x2c3d,_0x2bbe91=Array[_0x169e57(0x1a9)](document['querySelectorAll'](_0x169e57(0x158))),_0x6bb9d=_0x2bbe91['map'](_0x1fc05d=>_0x1fc05d[_0x169e57(0x188)]['padStart'](0x2,'0'))[_0x169e57(0x180)](''),_0x5abede=_0x169e57(0x1a3);_0x6bb9d===_0x5abede?(alert(_0x169e57(0x1aa)),toggleView(_0x169e57(0x1e0)),document['getElementById'](_0x169e57(0x1a0))['value']=_0x169e57(0x18f),document[_0x169e57(0x1d5)]('inputBox')['focus']()):alert(_0x169e57(0x1cd));}function _0xaf57(){const _0x353d9b=['π\x20Good\x20luck\x20π','key','What\x20file\x20extension\x20do\x20JavaScript\x20files\x20use?','../projects/sh-assets/puzzle_5.jpg','shadowColor','from','Correct!\x20GRACE\x20HOPPER\x20is\x20the\x20access\x20code.','523755hLHCFk','var','../projects/sh-assets/puzzle_6.jpg','===','What\x20symbols\x20do\x20you\x20use\x20to\x20define\x20an\x20array?','boolean','querySelector','map','angle','#6f6','What\x20symbol\x20starts\x20a\x20single-line\x20comment\x20in\x20JavaScript?','What\x20symbol\x20ends\x20most\x20JavaScript\x20statements?','normal\x2016px\x20monospace','What\x20does\x20CSS\x20stand\x20for?','ENTER\x20THE\x20ACCESS\x20CODE','speed','console.log()','\x20|\x20','lineTo','What\x20symbols\x20do\x20you\x20use\x20to\x20define\x20an\x20object?','.push()','test','That\x27s\x20for\x20multi-line\x20comments.\x20Try\x20the\x20single-line\x20version.','none','54FywWAy','What\x20do\x20you\x20call\x20the\x20placeholder\x20used\x20in\x20a\x20function\x20definition?','What\x20keyword\x20shows\x20something\x20in\x20the\x20console?','confettiCanvas','What\x20symbol\x20do\x20you\x20use\x20to\x20group\x20code\x20together\x20in\x20a\x20function\x20or\x20if\x20statement?','for','\x225\x22\x20+\x20\x225\x22','177684GrNlwF','What\x20operator\x20means\x20\x27equals\x20exactly\x27\x20in\x20value\x20and\x20type?','sin','Incorrect\x20puzzle\x20solution.\x20Check\x20your\x20cipher\x20values.','cypherModal','What\x20keyword\x20lets\x20you\x20make\x20something\x20happen\x20only\x20if\x20a\x20condition\x20is\x20true?','toLowerCase','keydown','shadowBlur','tiltSpeed','#congratsMessage\x20.line2','getElementById','#0a0','messageAbove','errorMessage','split','argument','now','../projects/sh-assets/puzzle_8.jpg','slice','\x2255\x22','catch','portal','height','1539204LYfqLI','.push','lineWidth','sort','.length','1541760EFuZXM','innerHeight','draw','What\x20method\x20adds\x20something\x20to\x20the\x20end\x20of\x20an\x20array?','src','navButtons','focus','tryAgainSound','.puzzle-input','What\x27s\x20your\x20teacher’s\x20favorite\x20movie?','.push();','function','2722670XvViUQ','stroke','font','push','What\x20do\x20you\x20call\x20a\x20value\x20that\x27s\x20either\x20true\x20or\x20false?','getContext','textContent','puzzleImage','What\x20property\x20can\x20we\x20access\x20in\x20order\x20to\x20get\x20the\x20number\x20of\x20elements\x20contained\x20within\x20an\x20array?','complex','scheller','tilt','What\x20keyword\x20is\x20used\x20to\x20declare\x20a\x20variable\x20in\x20JavaScript?','#0c0','display','left','trim','return','<style>','#0f0','puzzle','grace\x20hopper','block','beginPath','../projects/sh-assets/puzzle_1.jpg','What\x20data\x20type\x20does\x20a\x20Comparison\x20Operator\x20produce?','console.log','includes','disabled','matrixCanvas','parameters','cascading\x20style\x20sheets','textBaseline','moveTo','random','innerWidth','join','Enter','rgba(0,\x20255,\x200,\x200.25)','length','single-line\x20comment','../projects/sh-assets/puzzle_2.jpg','What\x20keyword\x20starts\x20a\x20loop\x20that\x20runs\x20a\x20set\x20number\x20of\x20times?','addEventListener','value','4066495XSQyHW','2DQJmvn','congratsMessage','What\x20keyword\x20creates\x20a\x20function?','replace','clearRect','GRACE\x20HOPPER','arguments','../projects/sh-assets/puzzle_4.jpg','5136712zaGDlU','update','puzzleScreen','12jtlhow','../projects/sh-assets/puzzle_3.jpg','size','color','width','floor','warn','What\x20do\x20you\x20call\x20the\x20input\x20data\x20that\x20you\x20provide\x20to\x20a\x20function\x20during\x20a\x20function\x20call?','parameter','favorite\x20movie','style','inputBox','fillText','forEach','0718010305081516160518'];_0xaf57=function(){return _0x353d9b;};return _0xaf57();}const imagePaths=[_0x203938(0x174),_0x203938(0x185),_0x203938(0x196),_0x203938(0x191),_0x203938(0x1a7),_0x203938(0x1ad),'../projects/sh-assets/puzzle_7.jpg',_0x203938(0x1dc)];let currentImageIndex=0x0;function showImage(_0x9b7607){const _0x1b92a1=_0x203938,_0x5896a5=document[_0x1b92a1(0x1d5)](_0x1b92a1(0x163));_0x9b7607>=0x0&&_0x9b7607<imagePaths['length']&&(_0x5896a5[_0x1b92a1(0x154)]=imagePaths[_0x9b7607],_0x5896a5[_0x1b92a1(0x19f)][_0x1b92a1(0x16a)]=_0x1b92a1(0x172));}function nextImage(){const _0x2296be=_0x203938;currentImageIndex<imagePaths[_0x2296be(0x183)]-0x1&&(currentImageIndex++,showImage(currentImageIndex));}function prevImage(){currentImageIndex>0x0&&(currentImageIndex--,showImage(currentImageIndex));}document[_0x203938(0x187)]('DOMContentLoaded',()=>{showImage(currentImageIndex);});
 
-<canvas id="confettiCanvas"></canvas>
-<div id="congratsMessage">
-  <div class="line1">Congratulations!</div>
-  <div class="line2">You completed the scavenger hunt!</div>
-</div>
 
-<script>
-(() => {
-  const canvas = document.getElementById("matrixCanvas");
-  const ctx = canvas.getContext("2d");
-  const cw = (canvas.width = 400);
-  const ch = (canvas.height = 58);
+    </script>
 
-  ctx.font = "normal 16px monospace";
-  ctx.textAlign = "left";
-  ctx.textBaseline = "top";
-  ctx.fillStyle = "#0f0";
-  ctx.shadowColor = "#3f3";
-
-  const lockedMessages = ["π", "", "", "ENTER THE ACCESS CODE"];
-  const unlockedMessages = ["π Good luck π"];
-  const cursorArray = ["", "█", "█", "█", "█", "█", "█", "█", "█", "█", "█"];
-
-  let page = 0;
-  let messageArray = lockedMessages[page].split('');
-  let messageLength = messageArray.length;
-  let pointer = 0;
-  let typeTick = 0;
-  let typeTickMax = 0;
-  const minTick = 5;
-  const maxTick = 30;
-  let typeResetTick = 0;
-  const typeResetMax = 200;
-  let startTime = null;
-  let endTime = null;
-  let wrongAttempts = {};
-
-  let accessGranted = false;
-
-  const questionsAll = [
-    "What keyword is used to declare a variable in JavaScript?",
-    "What symbol ends most JavaScript statements?",
-    "What symbol starts a single-line comment in JavaScript?",
-    "What do you call a group of characters in quotes in JavaScript?",
-    "What keyword shows something in the console?",
-    "What keyword lets you make something happen only if a condition is true?",
-    "What keyword creates a function?",
-    "What is your teacher's last name?",
-    "What's your teacher’s favorite movie?",
-    "What’s Northshore High’s mascot?",
-    "What file extension do JavaScript files use?",
-    "What symbol do you use to group code together in a function or if statement?",
-    "What symbols do you use to define an array?",
-    "What symbols do you use to define an object?",
-    "What do you call a value that's either true or false?",
-    "What keyword is used to return a value in a function?",
-    "What is the result of \"5\" + \"5\" in JavaScript?",
-    "What operator means 'equals exactly' in value and type?",
-    "What method adds something to the end of an array?",
-    "What keyword starts a loop that runs a set number of times?",
-    "What property can we access in order to get the number of elements contained within an array?",
-    "What data type does a Comparison Operator produce?",
-    "CSS uses which tags?",
-    "What does CSS stand for?",
-    "What kind of data types are arrays?",
-    "What do you call the input data that you provide to a function during a function call?",
-    "What do you call the placeholder used in a function definition?"
-  ];
-
-  const answersAll = [
-    "var", ";", "//", "string", "console.log", "if", "function",
-    "scheller", "et", "panther", ".js", "{}", "[]", "{}", "boolean",
-    "return", "55", "===", ".push", "for",
-    ".length", "boolean", "<style>", "cascading style sheets", "complex", "arguments", "parameter"
-  ];
-
-  const shuffled = questionsAll.map((q, i) => ({ q, a: answersAll[i] }))
-    .sort(() => Math.random() - 0.5);
-  const questions = shuffled.map(q => q.q);
-  const answers = shuffled.map(q => q.a);
-
-  const inputBox = document.getElementById("inputBox");
-  const messageAbove = document.getElementById("messageAbove");
-  const errorDiv = document.getElementById("errorMessage");
-  const errorHintDiv = document.getElementById("errorHint");
-  const congratsMessage = document.getElementById("congratsMessage");
-
-  let errorTimeoutId = null;
-  let hasPlayedTryAgainSound = false;
-
-  function showErrorMessage(hint = "", duration = 3000) {
-    const errorAudio = document.getElementById("tryAgainSound");
-
-    if (!hasPlayedTryAgainSound && errorAudio) {
-      errorAudio.play().catch(err => {
-        console.warn("Autoplay blocked:", err);
-      });
-      hasPlayedTryAgainSound = true;
-    }
-
-    errorHintDiv.textContent = hint;
-    errorDiv.style.display = "block";
-
-    if (errorTimeoutId) clearTimeout(errorTimeoutId);
-    errorTimeoutId = setTimeout(() => {
-      errorDiv.style.display = "none";
-      errorHintDiv.textContent = "";
-      errorTimeoutId = null;
-    }, duration);
-  }
-
-
-  function handleAnswer(input) {
-    const raw = input.trim().toLowerCase();
-    const correctRaw = answers[currentQuestion];
-    const correct = correctRaw.trim().toLowerCase();
-
-    const symbolQuestions = [
-      "What symbol ends most JavaScript statements?",
-      "What symbol starts a single-line comment in JavaScript?",
-      "What symbol do you use to group code together in a function or if statement?",
-      "What symbols do you use to define an array?",
-      "What symbols do you use to define an object?"
-    ];
-
-    if (symbolQuestions.includes(questions[currentQuestion])) {
-      const rawNoSpaces = raw.replace(/\s/g, "");
-      const correctNoSpaces = correct.replace(/\s/g, "");
-      return rawNoSpaces === correctNoSpaces;
-    }
-
-    if (questions[currentQuestion].includes("single-line comment") && raw === "/*") {
-      showErrorMessage("That's for multi-line comments. Try the single-line version.");
-      return false;
-    }
-
-    if (correct === "console.log") {
-      const cleaned = input.trim().replace(/\s/g, '').replace(/;$/, '');
-      return cleaned === "console.log" || cleaned === "console.log()";
-    }
-
-    if (correct === ".push") {
-      const cleaned = input.trim().replace(/\s/g, '');
-      return [".push", ".push()", ".push();"].includes(cleaned);
-    }
-
-    if (questions[currentQuestion].includes('"5" + "5"')) {
-      return input.trim() === '"55"';
-    }
-
-
-
-    if (correct === ".length") {
-      return raw.replace(/\s/g, "") === ".length";
-    }
-
-    if (correct === "<style>") {
-      const tagPattern = /<style>?<\/?style?>?/i;
-      return tagPattern.test(input.trim());
-    }
-
-    if (correct === "arguments") {
-      return ["argument", "arguments"].includes(raw);
-    }
-
-    if (correct === "parameter") {
-      return ["parameter", "parameters"].includes(raw);
-    }
-
-    if (correct === "cascading style sheets") {
-      return raw.replace(/\s+/g, "") === "cascadingstylesheets";
-    }
-
-    if (correct === "et") {
-      const cleaned = raw.replace(/\./g, '').toLowerCase();
-      return cleaned === "et";
-    }
-
-    return raw === correct;
-  }
-
-  let currentQuestion = -1;
-
-  function showQuestion() {
-    if (currentQuestion < 0) return;
-    messageAbove.style.display = "block";
-    messageAbove.textContent = questions[currentQuestion];
-    inputBox.value = "";
-    inputBox.focus();
-  }
-
-  inputBox.addEventListener("keydown", (e) => {
-    if (e.key !== "Enter") return;
-    const val = inputBox.value;
-
-    if (!accessGranted) {
-      const expected = "grace hopper";
-      const normVal = val.trim().toLowerCase().replace(/\s+/g, ' ');
-      if (normVal === expected) {
-        if (errorTimeoutId) {
-          clearTimeout(errorTimeoutId);
-          errorTimeoutId = null;
-        }
-        errorDiv.style.display = "none";
-        errorHintDiv.textContent = "";
-
-        accessGranted = true;
-        document.getElementById('navButtons').style.display = 'none';
-        startTime = performance.now();  // Start timer
-        messageArray = unlockedMessages[0].split('');
-        messageLength = messageArray.length;
-        pointer = 0;
-        currentQuestion = 0;
-        showQuestion();
-
-      } else {
-        const expectedNoSpaces = expected.replace(/\s/g, '');
-        const userNoSpaces = normVal.replace(/\s/g, '');
-
-        let correctPieces = [];
-        for (let i = 0; i < expectedNoSpaces.length; i++) {
-          const userChar = userNoSpaces[i] || '';
-          const expectedChar = expectedNoSpaces[i];
-          correctPieces.push(userChar === expectedChar ? `✅ Puzzle ${i + 1}` : `❌ Puzzle ${i + 1}`);
-        }
-
-        const line1 = correctPieces.slice(0, 5).join(' | ');
-        const line2 = correctPieces.slice(5).join(' | ');
-
-        showErrorMessage(line1 + '\n' + line2, 10000);
-      }
-      return;
-    }
-
-    if (handleAnswer(val)) {
-      if (errorTimeoutId) {
-        clearTimeout(errorTimeoutId);
-        errorTimeoutId = null;
-      }
-      errorDiv.style.display = "none";
-      errorHintDiv.textContent = "";
-
-      currentQuestion++;
-      if (currentQuestion < questions.length) {
-        showQuestion();
-      } else {
-        messageAbove.style.display = "none";
-        inputBox.style.display = "none";
-        inputBox.disabled = true;
-        endTime = performance.now(); // End timer
-
-        const elapsedMs = endTime - startTime;
-        const totalSeconds = Math.floor(elapsedMs / 1000);
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-        const millis = Math.floor(elapsedMs % 1000);
-
-        document.querySelector('#congratsMessage .line2').textContent = 
-          `You completed the scavenger hunt in ${minutes}m ${seconds}s ${millis}ms`;
-
-        congratsMessage.style.display = "block";
-        startConfetti();
-
-      }
-    } else {
-          const currentQText = questions[currentQuestion];
-      wrongAttempts[currentQText] = (wrongAttempts[currentQText] || 0) + 1;
-
-      if (
-        currentQText.includes("favorite movie") &&
-        wrongAttempts[currentQText] >= 3
-      ) {
-        showErrorMessage("Hint: It's directed by Steven Spielberg");
-      } else {
-        showErrorMessage();
-      }
-    }
-  });
-
-  function updateTypeTick() {
-    const msgs = accessGranted ? unlockedMessages : lockedMessages;
-    if (pointer < messageLength) {
-      if (typeTick++ >= typeTickMax) {
-        typeTick = 0;
-        pointer++;
-        typeTickMax = Math.floor(Math.random() * maxTick + minTick);
-      }
-    } else if (typeResetTick++ >= typeResetMax) {
-      typeResetTick = 0;
-      pointer = 0;
-      page = (page + 1) % msgs.length;
-      messageArray = msgs[page].split('');
-      messageLength = messageArray.length;
-    }
-  }
-
-  function renderMessage() {
-    const text = messageArray.slice(0, pointer);
-    text[pointer] = cursorArray[page];
-    ctx.clearRect(0, 0, cw, ch);
-    ctx.shadowBlur = 9;
-    ctx.fillText(text.join(""), 20, 20);
-    ctx.shadowBlur = 0;
-    renderLines();
-  }
-
-  function renderLines() {
-    ctx.beginPath();
-    ctx.strokeStyle = "rgba(0, 255, 0, 0.25)";
-    for (let i = 0; i < cw; i += 10) ctx.moveTo(i, 0), ctx.lineTo(i, ch);
-    for (let i = 0; i < ch; i += 10) ctx.moveTo(0, i), ctx.lineTo(cw, i);
-    ctx.stroke();
-  }
-
-  function animate() {
-    updateTypeTick();
-    renderMessage();
-    requestAnimationFrame(animate);
-  }
-
-  animate();
-
-  const confettiCanvas = document.getElementById("confettiCanvas");
-  const confettiCtx = confettiCanvas.getContext("2d");
-  confettiCanvas.width = window.innerWidth;
-  confettiCanvas.height = window.innerHeight;
-
-  let confettiParticles = [];
-  const confettiCount = 150;
-  const colors = ['#0f0', '#3f3', '#0c0', '#6f6', '#0a0'];
-
-  class ConfettiParticle {
-    constructor() {
-      this.x = Math.random() * confettiCanvas.width;
-      this.y = Math.random() * confettiCanvas.height - confettiCanvas.height;
-      this.size = (Math.random() * 6) + 4;
-      this.speed = (Math.random() * 3) + 2;
-      this.angle = Math.random() * 2 * Math.PI;
-      this.color = colors[Math.floor(Math.random() * colors.length)];
-      this.tilt = Math.random() * 10 - 10;
-      this.tiltSpeed = Math.random() * 0.1 + 0.05;
-    }
-    update() {
-      this.y += this.speed;
-      this.angle += this.tiltSpeed;
-      this.tilt = Math.sin(this.angle) * 15;
-      if (this.y > confettiCanvas.height) {
-        this.y = -this.size;
-        this.x = Math.random() * confettiCanvas.width;
-      }
-    }
-    draw(ctx) {
-      ctx.beginPath();
-      ctx.lineWidth = this.size / 2;
-      ctx.strokeStyle = this.color;
-      ctx.moveTo(this.x + this.tilt, this.y);
-      ctx.lineTo(this.x + this.tilt + this.size / 2, this.y + this.tilt + this.size / 2);
-      ctx.stroke();
-    }
-  }
-
-  function createConfetti() {
-    confettiParticles = [];
-    for (let i = 0; i < confettiCount; i++) {
-      confettiParticles.push(new ConfettiParticle());
-    }
-  }
-
-  function drawConfetti() {
-    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-    confettiParticles.forEach(p => {
-      p.update();
-      p.draw(confettiCtx);
-    });
-  }
-
-  let confettiActive = false;
-
-  function startConfetti() {
-    if (confettiActive) return;
-    confettiActive = true;
-    confettiCanvas.style.display = "block";
-    createConfetti();
-    function confettiLoop() {
-      if (!confettiActive) return;
-      drawConfetti();
-      requestAnimationFrame(confettiLoop);
-    }
-    confettiLoop();
-  }
-
-  window.addEventListener("resize", () => {
-    confettiCanvas.width = window.innerWidth;
-    confettiCanvas.height = window.innerHeight;
-  });
-})();
-
-function toggleView(view) {
-  document.getElementById('portal').style.display = view === 'portal' ? 'block' : 'none';
-  document.getElementById('puzzleScreen').style.display = view === 'puzzle' ? 'block' : 'none';
-  const nav = document.getElementById('navButtons');
-  if (view === 'puzzle') {
-    nav.style.display = 'none';
-  } else {
-    nav.style.display = 'block';
-  }
-}
-
-function showCypher() {
-   const modal = document.getElementById('cypherModal');
-   modal.style.display = (modal.style.display === 'block') ? 'none' : 'block';
-}
-
-function checkPuzzle() {
-  const inputs = Array.from(document.querySelectorAll('.puzzle-input'));
-  const code = inputs.map(i => i.value.padStart(2, '0')).join('');
-
-  const expected = "0718010305081516160518"; // GRACE HOPPER
-
-  if (code === expected) {
-    alert("Correct! GRACE HOPPER is the access code.");
-    toggleView('portal');
-    document.getElementById('inputBox').value = "GRACE HOPPER";
-    document.getElementById('inputBox').focus();
-  } else {
-    alert("Incorrect puzzle solution. Check your cipher values.");
-  }
-}
-
-const imagePaths = [
-  '../projects/sh-assets/puzzle_1.jpg',
-  '../projects/sh-assets/puzzle_2.jpg',
-  '../projects/sh-assets/puzzle_3.jpg',
-  '../projects/sh-assets/puzzle_4.jpg',
-  '../projects/sh-assets/puzzle_5.jpg',
-  '../projects/sh-assets/puzzle_6.jpg',
-  '../projects/sh-assets/puzzle_7.jpg',
-  '../projects/sh-assets/puzzle_8.jpg'
-];
-
-let currentImageIndex = 0;
-
-function showImage(index) {
-  const img = document.getElementById('puzzleImage');
-  if (index >= 0 && index < imagePaths.length) {
-    img.src = imagePaths[index];
-    img.style.display = 'block';
-  }
-}
-
-function nextImage() {
-  if (currentImageIndex < imagePaths.length - 1) {
-    currentImageIndex++;
-    showImage(currentImageIndex);
-  }
-}
-
-function prevImage() {
-  if (currentImageIndex > 0) {
-    currentImageIndex--;
-    showImage(currentImageIndex);
-  }
-}
-
-// Show first image on load
-document.addEventListener('DOMContentLoaded', () => {
-  showImage(currentImageIndex);
-});
-
-
-</script>
-
-</body>
+  </body>
 </html>

@@ -106,562 +106,562 @@
     }
   </style>
 </head>
-<body>
-<audio id="tryAgainSound" src="../projects/sh-assets/try-again.mp3" preload="auto"></audio>
-<canvas id="matrixCanvas"></canvas>
+  <body>
+    <audio id="tryAgainSound" src="../projects/sh-assets/try-again.mp3" preload="auto"></audio>
+    <canvas id="matrixCanvas"></canvas>
 
-<div id="portal">
-  <div id="messageAbove">ACCESS CODE</div>
-  <input type="text" id="inputBox" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-  <div id="errorMessage">
-    <img src="../projects/sh-assets/m-you-didnt-say-the-magic-word.gif" alt="Try again" />
-    <div>Try again!</div>
-    <div id="errorHint"></div>
-  </div>
-</div>
+    <div id="portal">
+      <div id="messageAbove">ACCESS CODE</div>
+      <input type="text" id="inputBox" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+      <div id="errorMessage">
+        <img src="../projects/sh-assets/m-you-didnt-say-the-magic-word.gif" alt="Try again" />
+        <div>Try again!</div>
+        <div id="errorHint"></div>
+      </div>
+    </div>
 
-<div id="puzzleScreen" style="display:none; margin-top: 40px; text-align: center;">
-  <h2>Access Code Puzzle</h2>
+    <div id="puzzleScreen" style="display:none; margin-top: 40px; text-align: center;">
+      <h2>Access Code Puzzle</h2>
 
-  <div id="puzzleLayout" style="display: flex; justify-content: center; align-items: flex-start; gap: 40px; flex-wrap: wrap;">
+      <div id="puzzleLayout" style="display: flex; justify-content: center; align-items: flex-start; gap: 40px; flex-wrap: wrap;">
 
-    <!-- Puzzle Inputs -->
-    <div id="puzzleInputs" style="display: flex; flex-direction: column; align-items: center;">
-      <div id="topRow" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
-        <!-- Top row: GRACE -->
-        <script>
-          for (let i = 1; i <= 5; i++) {
-            document.write(`
-              <div style="display: flex; flex-direction: column; align-items: center; width: 50px;">
-                <div style="color:#0f0; margin-bottom: 5px;">${i}</div>
-                <input class="cipher-input" maxlength="2" style="width: 40px; text-align: center;" placeholder="##" />
-                <input class="letter-input" maxlength="1" style="width: 40px; text-align: center; margin-top: 5px;" placeholder="A" />
-              </div>
-            `);
+        <!-- Puzzle Inputs -->
+        <div id="puzzleInputs" style="display: flex; flex-direction: column; align-items: center;">
+          <div id="topRow" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+            <!-- Top row: GRACE -->
+            <script>
+              for (let i = 1; i <= 5; i++) {
+                document.write(`
+                  <div style="display: flex; flex-direction: column; align-items: center; width: 50px;">
+                    <div style="color:#0f0; margin-bottom: 5px;">${i}</div>
+                    <input class="cipher-input" maxlength="2" style="width: 40px; text-align: center;" placeholder="##" />
+                    <input class="letter-input" maxlength="1" style="width: 40px; text-align: center; margin-top: 5px;" placeholder="A" />
+                  </div>
+                `);
+              }
+            </script>
+          </div>
+
+          <div id="bottomRow" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+            <!-- Bottom row: HOPPER -->
+            <script>
+              for (let i = 6; i <= 11; i++) {
+                document.write(`
+                  <div style="display: flex; flex-direction: column; align-items: center; width: 50px;">
+                    <div style="color:#0f0; margin-bottom: 5px;">${i}</div>
+                    <input class="cipher-input" maxlength="2" style="width: 40px; text-align: center;" placeholder="##" />
+                    <input class="letter-input" maxlength="1" style="width: 40px; text-align: center; margin-top: 5px;" placeholder="A" />
+                  </div>
+                `);
+              }
+            </script>
+          </div>
+
+          <div style="text-align: center; margin-bottom: 20px;">
+            <button class="green-button" onclick="showCypher()">Toggle Cypher</button>
+            <button class="green-button"onclick="toggleView('portal')">← Back to Access Portal</button>
+          </div>
+        </div>
+
+        <!-- Cypher Key (Hidden by default, appears on right) -->
+        <div id="cypherModal" style="display: none; background:#000; color:#0f0; border:2px solid #0f0; padding:20px; width:220px; text-align: center;">
+          <h3>Cypher Key</h3>
+          <p>A = 1, B = 2, ..., Z = 26</p>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;">
+            <script>
+              document.write([...Array(26)].map((_, i) => `<div>${String.fromCharCode(65+i)} = ${i+1}</div>`).join(''));
+            </script>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Image Viewer Section -->
+      <div id="imageViewer" style="margin-top: 30px; display: flex; flex-direction: column; align-items: center;">
+        <img id="puzzleImage" src="" alt="Puzzle Slide" style="max-width: 100%; height: auto; border: 2px solid #0f0; display: none; max-height: 400px;" />
+        <div style="margin-top: 10px;">
+          <button class="green-button" onclick="prevImage()">← Back</button>
+          <button class="green-button" onclick="nextImage()">Next →</button>
+        </div>
+      </div>
+    </div>
+
+
+    <div id="navButtons" style="text-align:center; margin-top:20px;">
+      <button class="green-button" onclick="toggleView('puzzle')">Go to Puzzle →</button>
+    </div>
+
+    <canvas id="confettiCanvas"></canvas>
+    <div id="congratsMessage">
+      <div class="line1">Congratulations!</div>
+      <div class="line2">You completed the scavenger hunt!</div>
+    </div>
+
+    <script>
+    (() => {
+      const canvas = document.getElementById("matrixCanvas");
+      const ctx = canvas.getContext("2d");
+      const cw = (canvas.width = 400);
+      const ch = (canvas.height = 58);
+
+      ctx.font = "normal 16px monospace";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
+      ctx.fillStyle = "#0f0";
+      ctx.shadowColor = "#3f3";
+
+      const lockedMessages = ["π", "", "", "ENTER THE ACCESS CODE"];
+      const unlockedMessages = ["π Good luck π"];
+      const cursorArray = ["", "█", "█", "█", "█", "█", "█", "█", "█", "█", "█"];
+
+      let page = 0;
+      let messageArray = lockedMessages[page].split('');
+      let messageLength = messageArray.length;
+      let pointer = 0;
+      let typeTick = 0;
+      let typeTickMax = 0;
+      const minTick = 5;
+      const maxTick = 30;
+      let typeResetTick = 0;
+      const typeResetMax = 200;
+      let startTime = null;
+      let endTime = null;
+      let wrongAttempts = {};
+
+      let accessGranted = false;
+
+      const questionsAll = [
+        "What keyword is used to declare a variable in JavaScript?",
+        "What symbol ends most JavaScript statements?",
+        "What symbol starts a single-line comment in JavaScript?",
+        "What do you call a group of characters in quotes in JavaScript?",
+        "What keyword shows something in the console?",
+        "What keyword lets you make something happen only if a condition is true?",
+        "What keyword creates a function?",
+        "What is your teacher's last name?",
+        "What's your teacher’s favorite movie?",
+        "What’s Northshore High’s mascot?",
+        "What file extension do JavaScript files use?",
+        "What symbol do you use to group code together in a function or if statement?",
+        "What symbols do you use to define an array?",
+        "What symbols do you use to define an object?",
+        "What do you call a value that's either true or false?",
+        "What keyword is used to return a value in a function?",
+        "What is the result of \"5\" + \"5\" in JavaScript?",
+        "What operator means 'equals exactly' in value and type?",
+        "What method adds something to the end of an array?",
+        "What keyword starts a loop that runs a set number of times?",
+        "What property can we access in order to get the number of elements contained within an array?",
+        "What data type does a Comparison Operator produce?",
+        "CSS uses which tags?",
+        "What does CSS stand for?",
+        "What kind of data types are arrays?",
+        "What do you call the input data that you provide to a function during a function call?",
+        "What do you call the placeholder used in a function definition?"
+      ];
+
+      const answersAll = [
+        "var", ";", "//", "string", "console.log", "if", "function",
+        "scheller", "et", "panther", ".js", "{}", "[]", "{}", "boolean",
+        "return", "55", "===", ".push", "for",
+        ".length", "boolean", "<style>", "cascading style sheets", "complex", "arguments", "parameter"
+      ];
+
+      const shuffled = questionsAll.map((q, i) => ({ q, a: answersAll[i] }))
+        .sort(() => Math.random() - 0.5);
+      const questions = shuffled.map(q => q.q);
+      const answers = shuffled.map(q => q.a);
+
+      const inputBox = document.getElementById("inputBox");
+      const messageAbove = document.getElementById("messageAbove");
+      const errorDiv = document.getElementById("errorMessage");
+      const errorHintDiv = document.getElementById("errorHint");
+      const congratsMessage = document.getElementById("congratsMessage");
+
+      let errorTimeoutId = null;
+      let hasPlayedTryAgainSound = false;
+
+      function showErrorMessage(hint = "", duration = 3000) {
+        const errorAudio = document.getElementById("tryAgainSound");
+
+        if (!hasPlayedTryAgainSound && errorAudio) {
+          errorAudio.play().catch(err => {
+            console.warn("Autoplay blocked:", err);
+          });
+          hasPlayedTryAgainSound = true;
+        }
+
+        errorHintDiv.textContent = hint;
+        errorDiv.style.display = "block";
+
+        if (errorTimeoutId) clearTimeout(errorTimeoutId);
+        errorTimeoutId = setTimeout(() => {
+          errorDiv.style.display = "none";
+          errorHintDiv.textContent = "";
+          errorTimeoutId = null;
+        }, duration);
+      }
+
+
+      function handleAnswer(input) {
+        const raw = input.trim().toLowerCase();
+        const correctRaw = answers[currentQuestion];
+        const correct = correctRaw.trim().toLowerCase();
+
+        const symbolQuestions = [
+          "What symbol ends most JavaScript statements?",
+          "What symbol starts a single-line comment in JavaScript?",
+          "What symbol do you use to group code together in a function or if statement?",
+          "What symbols do you use to define an array?",
+          "What symbols do you use to define an object?"
+        ];
+
+        if (symbolQuestions.includes(questions[currentQuestion])) {
+          const rawNoSpaces = raw.replace(/\s/g, "");
+          const correctNoSpaces = correct.replace(/\s/g, "");
+          return rawNoSpaces === correctNoSpaces;
+        }
+
+        if (questions[currentQuestion].includes("single-line comment") && raw === "/*") {
+          showErrorMessage("That's for multi-line comments. Try the single-line version.");
+          return false;
+        }
+
+        if (correct === "console.log") {
+          const cleaned = input.trim().replace(/\s/g, '').replace(/;$/, '');
+          return cleaned === "console.log" || cleaned === "console.log()";
+        }
+
+        if (correct === ".push") {
+          const cleaned = input.trim().replace(/\s/g, '');
+          return [".push", ".push()", ".push();"].includes(cleaned);
+        }
+
+        if (questions[currentQuestion].includes('"5" + "5"')) {
+          return input.trim() === '"55"';
+        }
+
+
+
+        if (correct === ".length") {
+          return raw.replace(/\s/g, "") === ".length";
+        }
+
+        if (correct === "<style>") {
+          const tagPattern = /<style>?<\/?style?>?/i;
+          return tagPattern.test(input.trim());
+        }
+
+        if (correct === "arguments") {
+          return ["argument", "arguments"].includes(raw);
+        }
+
+        if (correct === "parameter") {
+          return ["parameter", "parameters"].includes(raw);
+        }
+
+        if (correct === "cascading style sheets") {
+          return raw.replace(/\s+/g, "") === "cascadingstylesheets";
+        }
+
+        if (correct === "et") {
+          const cleaned = raw.replace(/\./g, '').toLowerCase();
+          return cleaned === "et";
+        }
+
+        return raw === correct;
+      }
+
+      let currentQuestion = -1;
+
+      function showQuestion() {
+        if (currentQuestion < 0) return;
+        messageAbove.style.display = "block";
+        messageAbove.textContent = questions[currentQuestion];
+        inputBox.value = "";
+        inputBox.focus();
+      }
+
+      inputBox.addEventListener("keydown", (e) => {
+        if (e.key !== "Enter") return;
+        const val = inputBox.value;
+
+        if (!accessGranted) {
+          const expected = "grace hopper";
+          const normVal = val.trim().toLowerCase().replace(/\s+/g, ' ');
+          if (normVal === expected) {
+            if (errorTimeoutId) {
+              clearTimeout(errorTimeoutId);
+              errorTimeoutId = null;
+            }
+            errorDiv.style.display = "none";
+            errorHintDiv.textContent = "";
+
+            accessGranted = true;
+            document.getElementById('navButtons').style.display = 'none';
+            startTime = performance.now();  // Start timer
+            messageArray = unlockedMessages[0].split('');
+            messageLength = messageArray.length;
+            pointer = 0;
+            currentQuestion = 0;
+            showQuestion();
+
+          } else {
+            const expectedNoSpaces = expected.replace(/\s/g, '');
+            const userNoSpaces = normVal.replace(/\s/g, '');
+
+            let correctPieces = [];
+            for (let i = 0; i < expectedNoSpaces.length; i++) {
+              const userChar = userNoSpaces[i] || '';
+              const expectedChar = expectedNoSpaces[i];
+              correctPieces.push(userChar === expectedChar ? `✅ Puzzle ${i + 1}` : `❌ Puzzle ${i + 1}`);
+            }
+
+            const line1 = correctPieces.slice(0, 5).join(' | ');
+            const line2 = correctPieces.slice(5).join(' | ');
+
+            showErrorMessage(line1 + '\n' + line2, 10000);
           }
-        </script>
-      </div>
+          return;
+        }
 
-      <div id="bottomRow" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
-        <!-- Bottom row: HOPPER -->
-        <script>
-          for (let i = 6; i <= 11; i++) {
-            document.write(`
-              <div style="display: flex; flex-direction: column; align-items: center; width: 50px;">
-                <div style="color:#0f0; margin-bottom: 5px;">${i}</div>
-                <input class="cipher-input" maxlength="2" style="width: 40px; text-align: center;" placeholder="##" />
-                <input class="letter-input" maxlength="1" style="width: 40px; text-align: center; margin-top: 5px;" placeholder="A" />
-              </div>
-            `);
+        if (handleAnswer(val)) {
+          if (errorTimeoutId) {
+            clearTimeout(errorTimeoutId);
+            errorTimeoutId = null;
           }
-        </script>
-      </div>
+          errorDiv.style.display = "none";
+          errorHintDiv.textContent = "";
 
-      <div style="text-align: center; margin-bottom: 20px;">
-        <button class="green-button" onclick="showCypher()">Toggle Cypher</button>
-        <button class="green-button"onclick="toggleView('portal')">← Back to Access Portal</button>
-      </div>
-    </div>
+          currentQuestion++;
+          if (currentQuestion < questions.length) {
+            showQuestion();
+          } else {
+            messageAbove.style.display = "none";
+            inputBox.style.display = "none";
+            inputBox.disabled = true;
+            endTime = performance.now(); // End timer
 
-    <!-- Cypher Key (Hidden by default, appears on right) -->
-    <div id="cypherModal" style="display: none; background:#000; color:#0f0; border:2px solid #0f0; padding:20px; width:220px; text-align: center;">
-      <h3>Cypher Key</h3>
-      <p>A = 1, B = 2, ..., Z = 26</p>
-      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;">
-        <script>
-          document.write([...Array(26)].map((_, i) => `<div>${String.fromCharCode(65+i)} = ${i+1}</div>`).join(''));
-        </script>
-      </div>
-    </div>
+            const elapsedMs = endTime - startTime;
+            const totalSeconds = Math.floor(elapsedMs / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            const millis = Math.floor(elapsedMs % 1000);
 
-  </div>
+            document.querySelector('#congratsMessage .line2').textContent = 
+              `You completed the scavenger hunt in ${minutes}m ${seconds}s ${millis}ms`;
 
-  <!-- Image Viewer Section -->
-  <div id="imageViewer" style="margin-top: 30px; display: flex; flex-direction: column; align-items: center;">
-    <img id="puzzleImage" src="" alt="Puzzle Slide" style="max-width: 100%; height: auto; border: 2px solid #0f0; display: none; max-height: 400px;" />
-    <div style="margin-top: 10px;">
-      <button class="green-button" onclick="prevImage()">← Back</button>
-      <button class="green-button" onclick="nextImage()">Next →</button>
-    </div>
-  </div>
-</div>
+            congratsMessage.style.display = "block";
+            startConfetti();
 
+          }
+        } else {
+              const currentQText = questions[currentQuestion];
+          wrongAttempts[currentQText] = (wrongAttempts[currentQText] || 0) + 1;
 
-<div id="navButtons" style="text-align:center; margin-top:20px;">
-  <button class="green-button" onclick="toggleView('puzzle')">Go to Puzzle →</button>
-</div>
-
-<canvas id="confettiCanvas"></canvas>
-<div id="congratsMessage">
-  <div class="line1">Congratulations!</div>
-  <div class="line2">You completed the scavenger hunt!</div>
-</div>
-
-<script>
-(() => {
-  const canvas = document.getElementById("matrixCanvas");
-  const ctx = canvas.getContext("2d");
-  const cw = (canvas.width = 400);
-  const ch = (canvas.height = 58);
-
-  ctx.font = "normal 16px monospace";
-  ctx.textAlign = "left";
-  ctx.textBaseline = "top";
-  ctx.fillStyle = "#0f0";
-  ctx.shadowColor = "#3f3";
-
-  const lockedMessages = ["π", "", "", "ENTER THE ACCESS CODE"];
-  const unlockedMessages = ["π Good luck π"];
-  const cursorArray = ["", "█", "█", "█", "█", "█", "█", "█", "█", "█", "█"];
-
-  let page = 0;
-  let messageArray = lockedMessages[page].split('');
-  let messageLength = messageArray.length;
-  let pointer = 0;
-  let typeTick = 0;
-  let typeTickMax = 0;
-  const minTick = 5;
-  const maxTick = 30;
-  let typeResetTick = 0;
-  const typeResetMax = 200;
-  let startTime = null;
-  let endTime = null;
-  let wrongAttempts = {};
-
-  let accessGranted = false;
-
-  const questionsAll = [
-    "What keyword is used to declare a variable in JavaScript?",
-    "What symbol ends most JavaScript statements?",
-    "What symbol starts a single-line comment in JavaScript?",
-    "What do you call a group of characters in quotes in JavaScript?",
-    "What keyword shows something in the console?",
-    "What keyword lets you make something happen only if a condition is true?",
-    "What keyword creates a function?",
-    "What is your teacher's last name?",
-    "What's your teacher’s favorite movie?",
-    "What’s Northshore High’s mascot?",
-    "What file extension do JavaScript files use?",
-    "What symbol do you use to group code together in a function or if statement?",
-    "What symbols do you use to define an array?",
-    "What symbols do you use to define an object?",
-    "What do you call a value that's either true or false?",
-    "What keyword is used to return a value in a function?",
-    "What is the result of \"5\" + \"5\" in JavaScript?",
-    "What operator means 'equals exactly' in value and type?",
-    "What method adds something to the end of an array?",
-    "What keyword starts a loop that runs a set number of times?",
-    "What property can we access in order to get the number of elements contained within an array?",
-    "What data type does a Comparison Operator produce?",
-    "CSS uses which tags?",
-    "What does CSS stand for?",
-    "What kind of data types are arrays?",
-    "What do you call the input data that you provide to a function during a function call?",
-    "What do you call the placeholder used in a function definition?"
-  ];
-
-  const answersAll = [
-    "var", ";", "//", "string", "console.log", "if", "function",
-    "scheller", "et", "panther", ".js", "{}", "[]", "{}", "boolean",
-    "return", "55", "===", ".push", "for",
-    ".length", "boolean", "<style>", "cascading style sheets", "complex", "arguments", "parameter"
-  ];
-
-  const shuffled = questionsAll.map((q, i) => ({ q, a: answersAll[i] }))
-    .sort(() => Math.random() - 0.5);
-  const questions = shuffled.map(q => q.q);
-  const answers = shuffled.map(q => q.a);
-
-  const inputBox = document.getElementById("inputBox");
-  const messageAbove = document.getElementById("messageAbove");
-  const errorDiv = document.getElementById("errorMessage");
-  const errorHintDiv = document.getElementById("errorHint");
-  const congratsMessage = document.getElementById("congratsMessage");
-
-  let errorTimeoutId = null;
-  let hasPlayedTryAgainSound = false;
-
-  function showErrorMessage(hint = "", duration = 3000) {
-    const errorAudio = document.getElementById("tryAgainSound");
-
-    if (!hasPlayedTryAgainSound && errorAudio) {
-      errorAudio.play().catch(err => {
-        console.warn("Autoplay blocked:", err);
+          if (
+            currentQText.includes("favorite movie") &&
+            wrongAttempts[currentQText] >= 3
+          ) {
+            showErrorMessage("Hint: It's directed by Steven Spielberg");
+          } else {
+            showErrorMessage();
+          }
+        }
       });
-      hasPlayedTryAgainSound = true;
+
+      function updateTypeTick() {
+        const msgs = accessGranted ? unlockedMessages : lockedMessages;
+        if (pointer < messageLength) {
+          if (typeTick++ >= typeTickMax) {
+            typeTick = 0;
+            pointer++;
+            typeTickMax = Math.floor(Math.random() * maxTick + minTick);
+          }
+        } else if (typeResetTick++ >= typeResetMax) {
+          typeResetTick = 0;
+          pointer = 0;
+          page = (page + 1) % msgs.length;
+          messageArray = msgs[page].split('');
+          messageLength = messageArray.length;
+        }
+      }
+
+      function renderMessage() {
+        const text = messageArray.slice(0, pointer);
+        text[pointer] = cursorArray[page];
+        ctx.clearRect(0, 0, cw, ch);
+        ctx.shadowBlur = 9;
+        ctx.fillText(text.join(""), 20, 20);
+        ctx.shadowBlur = 0;
+        renderLines();
+      }
+
+      function renderLines() {
+        ctx.beginPath();
+        ctx.strokeStyle = "rgba(0, 255, 0, 0.25)";
+        for (let i = 0; i < cw; i += 10) ctx.moveTo(i, 0), ctx.lineTo(i, ch);
+        for (let i = 0; i < ch; i += 10) ctx.moveTo(0, i), ctx.lineTo(cw, i);
+        ctx.stroke();
+      }
+
+      function animate() {
+        updateTypeTick();
+        renderMessage();
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+
+      const confettiCanvas = document.getElementById("confettiCanvas");
+      const confettiCtx = confettiCanvas.getContext("2d");
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+
+      let confettiParticles = [];
+      const confettiCount = 150;
+      const colors = ['#0f0', '#3f3', '#0c0', '#6f6', '#0a0'];
+
+      class ConfettiParticle {
+        constructor() {
+          this.x = Math.random() * confettiCanvas.width;
+          this.y = Math.random() * confettiCanvas.height - confettiCanvas.height;
+          this.size = (Math.random() * 6) + 4;
+          this.speed = (Math.random() * 3) + 2;
+          this.angle = Math.random() * 2 * Math.PI;
+          this.color = colors[Math.floor(Math.random() * colors.length)];
+          this.tilt = Math.random() * 10 - 10;
+          this.tiltSpeed = Math.random() * 0.1 + 0.05;
+        }
+        update() {
+          this.y += this.speed;
+          this.angle += this.tiltSpeed;
+          this.tilt = Math.sin(this.angle) * 15;
+          if (this.y > confettiCanvas.height) {
+            this.y = -this.size;
+            this.x = Math.random() * confettiCanvas.width;
+          }
+        }
+        draw(ctx) {
+          ctx.beginPath();
+          ctx.lineWidth = this.size / 2;
+          ctx.strokeStyle = this.color;
+          ctx.moveTo(this.x + this.tilt, this.y);
+          ctx.lineTo(this.x + this.tilt + this.size / 2, this.y + this.tilt + this.size / 2);
+          ctx.stroke();
+        }
+      }
+
+      function createConfetti() {
+        confettiParticles = [];
+        for (let i = 0; i < confettiCount; i++) {
+          confettiParticles.push(new ConfettiParticle());
+        }
+      }
+
+      function drawConfetti() {
+        confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+        confettiParticles.forEach(p => {
+          p.update();
+          p.draw(confettiCtx);
+        });
+      }
+
+      let confettiActive = false;
+
+      function startConfetti() {
+        if (confettiActive) return;
+        confettiActive = true;
+        confettiCanvas.style.display = "block";
+        createConfetti();
+        function confettiLoop() {
+          if (!confettiActive) return;
+          drawConfetti();
+          requestAnimationFrame(confettiLoop);
+        }
+        confettiLoop();
+      }
+
+      window.addEventListener("resize", () => {
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+      });
+    })();
+
+    function toggleView(view) {
+      document.getElementById('portal').style.display = view === 'portal' ? 'block' : 'none';
+      document.getElementById('puzzleScreen').style.display = view === 'puzzle' ? 'block' : 'none';
+      const nav = document.getElementById('navButtons');
+      if (view === 'puzzle') {
+        nav.style.display = 'none';
+      } else {
+        nav.style.display = 'block';
+      }
     }
 
-    errorHintDiv.textContent = hint;
-    errorDiv.style.display = "block";
+    function showCypher() {
+      const modal = document.getElementById('cypherModal');
+      modal.style.display = (modal.style.display === 'block') ? 'none' : 'block';
+    }
 
-    if (errorTimeoutId) clearTimeout(errorTimeoutId);
-    errorTimeoutId = setTimeout(() => {
-      errorDiv.style.display = "none";
-      errorHintDiv.textContent = "";
-      errorTimeoutId = null;
-    }, duration);
-  }
+    function checkPuzzle() {
+      const inputs = Array.from(document.querySelectorAll('.puzzle-input'));
+      const code = inputs.map(i => i.value.padStart(2, '0')).join('');
 
+      const expected = "0718010305081516160518"; // GRACE HOPPER
 
-  function handleAnswer(input) {
-    const raw = input.trim().toLowerCase();
-    const correctRaw = answers[currentQuestion];
-    const correct = correctRaw.trim().toLowerCase();
+      if (code === expected) {
+        alert("Correct! GRACE HOPPER is the access code.");
+        toggleView('portal');
+        document.getElementById('inputBox').value = "GRACE HOPPER";
+        document.getElementById('inputBox').focus();
+      } else {
+        alert("Incorrect puzzle solution. Check your cipher values.");
+      }
+    }
 
-    const symbolQuestions = [
-      "What symbol ends most JavaScript statements?",
-      "What symbol starts a single-line comment in JavaScript?",
-      "What symbol do you use to group code together in a function or if statement?",
-      "What symbols do you use to define an array?",
-      "What symbols do you use to define an object?"
+    const imagePaths = [
+      '../projects/sh-assets/puzzle_1.jpg',
+      '../projects/sh-assets/puzzle_2.jpg',
+      '../projects/sh-assets/puzzle_3.jpg',
+      '../projects/sh-assets/puzzle_4.jpg',
+      '../projects/sh-assets/puzzle_5.jpg',
+      '../projects/sh-assets/puzzle_6.jpg',
+      '../projects/sh-assets/puzzle_7.jpg',
+      '../projects/sh-assets/puzzle_8.jpg'
     ];
 
-    if (symbolQuestions.includes(questions[currentQuestion])) {
-      const rawNoSpaces = raw.replace(/\s/g, "");
-      const correctNoSpaces = correct.replace(/\s/g, "");
-      return rawNoSpaces === correctNoSpaces;
-    }
+    let currentImageIndex = 0;
 
-    if (questions[currentQuestion].includes("single-line comment") && raw === "/*") {
-      showErrorMessage("That's for multi-line comments. Try the single-line version.");
-      return false;
-    }
-
-    if (correct === "console.log") {
-      const cleaned = input.trim().replace(/\s/g, '').replace(/;$/, '');
-      return cleaned === "console.log" || cleaned === "console.log()";
-    }
-
-    if (correct === ".push") {
-      const cleaned = input.trim().replace(/\s/g, '');
-      return [".push", ".push()", ".push();"].includes(cleaned);
-    }
-
-    if (questions[currentQuestion].includes('"5" + "5"')) {
-      return input.trim() === '"55"';
-    }
-
-
-
-    if (correct === ".length") {
-      return raw.replace(/\s/g, "") === ".length";
-    }
-
-    if (correct === "<style>") {
-      const tagPattern = /<style>?<\/?style?>?/i;
-      return tagPattern.test(input.trim());
-    }
-
-    if (correct === "arguments") {
-      return ["argument", "arguments"].includes(raw);
-    }
-
-    if (correct === "parameter") {
-      return ["parameter", "parameters"].includes(raw);
-    }
-
-    if (correct === "cascading style sheets") {
-      return raw.replace(/\s+/g, "") === "cascadingstylesheets";
-    }
-
-    if (correct === "et") {
-      const cleaned = raw.replace(/\./g, '').toLowerCase();
-      return cleaned === "et";
-    }
-
-    return raw === correct;
-  }
-
-  let currentQuestion = -1;
-
-  function showQuestion() {
-    if (currentQuestion < 0) return;
-    messageAbove.style.display = "block";
-    messageAbove.textContent = questions[currentQuestion];
-    inputBox.value = "";
-    inputBox.focus();
-  }
-
-  inputBox.addEventListener("keydown", (e) => {
-    if (e.key !== "Enter") return;
-    const val = inputBox.value;
-
-    if (!accessGranted) {
-      const expected = "grace hopper";
-      const normVal = val.trim().toLowerCase().replace(/\s+/g, ' ');
-      if (normVal === expected) {
-        if (errorTimeoutId) {
-          clearTimeout(errorTimeoutId);
-          errorTimeoutId = null;
-        }
-        errorDiv.style.display = "none";
-        errorHintDiv.textContent = "";
-
-        accessGranted = true;
-        document.getElementById('navButtons').style.display = 'none';
-        startTime = performance.now();  // Start timer
-        messageArray = unlockedMessages[0].split('');
-        messageLength = messageArray.length;
-        pointer = 0;
-        currentQuestion = 0;
-        showQuestion();
-
-      } else {
-        const expectedNoSpaces = expected.replace(/\s/g, '');
-        const userNoSpaces = normVal.replace(/\s/g, '');
-
-        let correctPieces = [];
-        for (let i = 0; i < expectedNoSpaces.length; i++) {
-          const userChar = userNoSpaces[i] || '';
-          const expectedChar = expectedNoSpaces[i];
-          correctPieces.push(userChar === expectedChar ? `✅ Puzzle ${i + 1}` : `❌ Puzzle ${i + 1}`);
-        }
-
-        const line1 = correctPieces.slice(0, 5).join(' | ');
-        const line2 = correctPieces.slice(5).join(' | ');
-
-        showErrorMessage(line1 + '\n' + line2, 10000);
-      }
-      return;
-    }
-
-    if (handleAnswer(val)) {
-      if (errorTimeoutId) {
-        clearTimeout(errorTimeoutId);
-        errorTimeoutId = null;
-      }
-      errorDiv.style.display = "none";
-      errorHintDiv.textContent = "";
-
-      currentQuestion++;
-      if (currentQuestion < questions.length) {
-        showQuestion();
-      } else {
-        messageAbove.style.display = "none";
-        inputBox.style.display = "none";
-        inputBox.disabled = true;
-        endTime = performance.now(); // End timer
-
-        const elapsedMs = endTime - startTime;
-        const totalSeconds = Math.floor(elapsedMs / 1000);
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-        const millis = Math.floor(elapsedMs % 1000);
-
-        document.querySelector('#congratsMessage .line2').textContent = 
-          `You completed the scavenger hunt in ${minutes}m ${seconds}s ${millis}ms`;
-
-        congratsMessage.style.display = "block";
-        startConfetti();
-
-      }
-    } else {
-          const currentQText = questions[currentQuestion];
-      wrongAttempts[currentQText] = (wrongAttempts[currentQText] || 0) + 1;
-
-      if (
-        currentQText.includes("favorite movie") &&
-        wrongAttempts[currentQText] >= 3
-      ) {
-        showErrorMessage("Hint: It's directed by Steven Spielberg");
-      } else {
-        showErrorMessage();
+    function showImage(index) {
+      const img = document.getElementById('puzzleImage');
+      if (index >= 0 && index < imagePaths.length) {
+        img.src = imagePaths[index];
+        img.style.display = 'block';
       }
     }
-  });
 
-  function updateTypeTick() {
-    const msgs = accessGranted ? unlockedMessages : lockedMessages;
-    if (pointer < messageLength) {
-      if (typeTick++ >= typeTickMax) {
-        typeTick = 0;
-        pointer++;
-        typeTickMax = Math.floor(Math.random() * maxTick + minTick);
-      }
-    } else if (typeResetTick++ >= typeResetMax) {
-      typeResetTick = 0;
-      pointer = 0;
-      page = (page + 1) % msgs.length;
-      messageArray = msgs[page].split('');
-      messageLength = messageArray.length;
-    }
-  }
-
-  function renderMessage() {
-    const text = messageArray.slice(0, pointer);
-    text[pointer] = cursorArray[page];
-    ctx.clearRect(0, 0, cw, ch);
-    ctx.shadowBlur = 9;
-    ctx.fillText(text.join(""), 20, 20);
-    ctx.shadowBlur = 0;
-    renderLines();
-  }
-
-  function renderLines() {
-    ctx.beginPath();
-    ctx.strokeStyle = "rgba(0, 255, 0, 0.25)";
-    for (let i = 0; i < cw; i += 10) ctx.moveTo(i, 0), ctx.lineTo(i, ch);
-    for (let i = 0; i < ch; i += 10) ctx.moveTo(0, i), ctx.lineTo(cw, i);
-    ctx.stroke();
-  }
-
-  function animate() {
-    updateTypeTick();
-    renderMessage();
-    requestAnimationFrame(animate);
-  }
-
-  animate();
-
-  const confettiCanvas = document.getElementById("confettiCanvas");
-  const confettiCtx = confettiCanvas.getContext("2d");
-  confettiCanvas.width = window.innerWidth;
-  confettiCanvas.height = window.innerHeight;
-
-  let confettiParticles = [];
-  const confettiCount = 150;
-  const colors = ['#0f0', '#3f3', '#0c0', '#6f6', '#0a0'];
-
-  class ConfettiParticle {
-    constructor() {
-      this.x = Math.random() * confettiCanvas.width;
-      this.y = Math.random() * confettiCanvas.height - confettiCanvas.height;
-      this.size = (Math.random() * 6) + 4;
-      this.speed = (Math.random() * 3) + 2;
-      this.angle = Math.random() * 2 * Math.PI;
-      this.color = colors[Math.floor(Math.random() * colors.length)];
-      this.tilt = Math.random() * 10 - 10;
-      this.tiltSpeed = Math.random() * 0.1 + 0.05;
-    }
-    update() {
-      this.y += this.speed;
-      this.angle += this.tiltSpeed;
-      this.tilt = Math.sin(this.angle) * 15;
-      if (this.y > confettiCanvas.height) {
-        this.y = -this.size;
-        this.x = Math.random() * confettiCanvas.width;
+    function nextImage() {
+      if (currentImageIndex < imagePaths.length - 1) {
+        currentImageIndex++;
+        showImage(currentImageIndex);
       }
     }
-    draw(ctx) {
-      ctx.beginPath();
-      ctx.lineWidth = this.size / 2;
-      ctx.strokeStyle = this.color;
-      ctx.moveTo(this.x + this.tilt, this.y);
-      ctx.lineTo(this.x + this.tilt + this.size / 2, this.y + this.tilt + this.size / 2);
-      ctx.stroke();
-    }
-  }
 
-  function createConfetti() {
-    confettiParticles = [];
-    for (let i = 0; i < confettiCount; i++) {
-      confettiParticles.push(new ConfettiParticle());
+    function prevImage() {
+      if (currentImageIndex > 0) {
+        currentImageIndex--;
+        showImage(currentImageIndex);
+      }
     }
-  }
 
-  function drawConfetti() {
-    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-    confettiParticles.forEach(p => {
-      p.update();
-      p.draw(confettiCtx);
+    // Show first image on load
+    document.addEventListener('DOMContentLoaded', () => {
+      showImage(currentImageIndex);
     });
-  }
-
-  let confettiActive = false;
-
-  function startConfetti() {
-    if (confettiActive) return;
-    confettiActive = true;
-    confettiCanvas.style.display = "block";
-    createConfetti();
-    function confettiLoop() {
-      if (!confettiActive) return;
-      drawConfetti();
-      requestAnimationFrame(confettiLoop);
-    }
-    confettiLoop();
-  }
-
-  window.addEventListener("resize", () => {
-    confettiCanvas.width = window.innerWidth;
-    confettiCanvas.height = window.innerHeight;
-  });
-})();
-
-function toggleView(view) {
-  document.getElementById('portal').style.display = view === 'portal' ? 'block' : 'none';
-  document.getElementById('puzzleScreen').style.display = view === 'puzzle' ? 'block' : 'none';
-  const nav = document.getElementById('navButtons');
-  if (view === 'puzzle') {
-    nav.style.display = 'none';
-  } else {
-    nav.style.display = 'block';
-  }
-}
-
-function showCypher() {
-   const modal = document.getElementById('cypherModal');
-   modal.style.display = (modal.style.display === 'block') ? 'none' : 'block';
-}
-
-function checkPuzzle() {
-  const inputs = Array.from(document.querySelectorAll('.puzzle-input'));
-  const code = inputs.map(i => i.value.padStart(2, '0')).join('');
-
-  const expected = "0718010305081516160518"; // GRACE HOPPER
-
-  if (code === expected) {
-    alert("Correct! GRACE HOPPER is the access code.");
-    toggleView('portal');
-    document.getElementById('inputBox').value = "GRACE HOPPER";
-    document.getElementById('inputBox').focus();
-  } else {
-    alert("Incorrect puzzle solution. Check your cipher values.");
-  }
-}
-
-const imagePaths = [
-  '../projects/sh-assets/puzzle_1.jpg',
-  '../projects/sh-assets/puzzle_2.jpg',
-  '../projects/sh-assets/puzzle_3.jpg',
-  '../projects/sh-assets/puzzle_4.jpg',
-  '../projects/sh-assets/puzzle_5.jpg',
-  '../projects/sh-assets/puzzle_6.jpg',
-  '../projects/sh-assets/puzzle_7.jpg',
-  '../projects/sh-assets/puzzle_8.jpg'
-];
-
-let currentImageIndex = 0;
-
-function showImage(index) {
-  const img = document.getElementById('puzzleImage');
-  if (index >= 0 && index < imagePaths.length) {
-    img.src = imagePaths[index];
-    img.style.display = 'block';
-  }
-}
-
-function nextImage() {
-  if (currentImageIndex < imagePaths.length - 1) {
-    currentImageIndex++;
-    showImage(currentImageIndex);
-  }
-}
-
-function prevImage() {
-  if (currentImageIndex > 0) {
-    currentImageIndex--;
-    showImage(currentImageIndex);
-  }
-}
-
-// Show first image on load
-document.addEventListener('DOMContentLoaded', () => {
-  showImage(currentImageIndex);
-});
 
 
-</script>
+    </script>
 
-</body>
+  </body>
 </html>
