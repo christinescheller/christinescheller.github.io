@@ -105,6 +105,25 @@
       cursor: pointer;
       border-radius: 4px;
     }
+
+    #correctMessage {
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      color: #0f0;
+      font-weight: bold;
+      font-size: 18px;
+      margin-top: 10px;
+      text-align: center;
+      user-select: none;
+      height: 24px;
+      pointer-events: none;
+    }
+
+    #correctMessage.show {
+      opacity: 1;
+    }
+
+
   </style>
 </head>
 <body>
@@ -131,6 +150,8 @@
       <div id="errorHint"></div>
     </div>
   </div>
+  <div id="correctMessage">Correct</div>
+
 
   <!-- Win effects -->
   <canvas id="confettiCanvas"></canvas>
@@ -385,48 +406,66 @@
           return;
         }
 
-        // After access is granted: handle Q&A scavenger
-        if (handleAnswer(val)) {
-          if (errorTimeoutId) {
-            clearTimeout(errorTimeoutId);
-            errorTimeoutId = null;
-          }
-          errorDiv.style.display = "none";
-          errorHintDiv.textContent = "";
-
-          currentQuestion++;
-          if (currentQuestion < questions.length) {
-            showQuestion();
-          } else {
-            // Completed!
-            messageAbove.style.display = "none";
-            inputBox.style.display = "none";
-            inputBox.disabled = true;
-            endTime = performance.now(); // End timer
-
-            const elapsedMs = endTime - startTime;
-            const totalSeconds = Math.floor(elapsedMs / 1000);
-            const minutes = Math.floor(totalSeconds / 60);
-            const seconds = totalSeconds % 60;
-            const millis = Math.floor(elapsedMs % 1000);
-
-            document.querySelector('#congratsMessage .line2').textContent =
-              `You completed the scavenger hunt in ${minutes}m ${seconds}s ${millis}ms`;
-
-            congratsMessage.style.display = "block";
-            startConfetti();
-          }
-        } else {
-          const currentQText = questions[currentQuestion];
-          wrongAttempts[currentQText] = (wrongAttempts[currentQText] || 0) + 1;
-
-          // Leftover patterned hint example (kept safe; won't trigger unless you add that Q)
-          if (currentQText.includes("favorite movie") && wrongAttempts[currentQText] >= 3) {
-            showErrorMessage("Hint: It's directed by Steven Spielberg");
-          } else {
-            showErrorMessage();
-          }
+       // After access is granted: handle Q&A scavenger
+      if (handleAnswer(val)) {
+        if (errorTimeoutId) {
+          clearTimeout(errorTimeoutId);
+          errorTimeoutId = null;
         }
+        errorDiv.style.display = "none";
+        errorHintDiv.textContent = "";
+
+        const correctMessageDiv = document.getElementById("correctMessage");
+
+        // Show "Correct" message (fade in)
+        correctMessageDiv.classList.add("show");
+
+        // Wait 2 seconds before starting fade-out
+        setTimeout(() => {
+          correctMessageDiv.classList.remove("show");
+
+          // When fade-out transition ends, trigger next question
+          const onTransitionEnd = () => {
+            correctMessageDiv.removeEventListener("transitionend", onTransitionEnd);
+
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+              showQuestion();
+            } else {
+              // Completed!
+              messageAbove.style.display = "none";
+              inputBox.style.display = "none";
+              inputBox.disabled = true;
+              endTime = performance.now(); // End timer
+
+              const elapsedMs = endTime - startTime;
+              const totalSeconds = Math.floor(elapsedMs / 1000);
+              const minutes = Math.floor(totalSeconds / 60);
+              const seconds = totalSeconds % 60;
+              const millis = Math.floor(elapsedMs % 1000);
+
+              document.querySelector('#congratsMessage .line2').textContent =
+                `You completed the scavenger hunt in ${minutes}m ${seconds}s ${millis}ms`;
+
+              congratsMessage.style.display = "block";
+              startConfetti();
+            }
+          };
+
+          correctMessageDiv.addEventListener("transitionend", onTransitionEnd);
+        }, 2000);
+
+      } else {
+        // Cancel any lingering "Correct" message immediately on wrong answer
+        const correctMessageDiv = document.getElementById("correctMessage");
+        correctMessageDiv.classList.remove("show");
+        void correctMessageDiv.offsetWidth; // Force reflow to reset fade-in logic
+
+        showErrorMessage(); // Your existing error handling
+      }
+
+
+
       });
 
       // ====== Header typing loop ======

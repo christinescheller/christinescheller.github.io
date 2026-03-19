@@ -11,8 +11,8 @@ $(document).ready(function() {
     "UP": 38,
     "DOWN": 40,
 
-    "W": 83,
-    "S": 87,
+    "W": 87,
+    "S": 83,
   };
 
   var BOARD_WIDTH = $('#board').width(); // Number: the maximum X-Coordinate of the screen
@@ -96,10 +96,10 @@ $(document).ready(function() {
       paddleRight.speedY = 7;
     }
 
-    if (event.which === KEY.W) {
+    if (event.which === KEY.S) {
       paddleLeft.speedY = 7;
     }
-    if (event.which === KEY.S) {
+    if (event.which === KEY.W) {
       paddleLeft.speedY = -7;
     }
   }
@@ -221,14 +221,11 @@ $(document).ready(function() {
   }
 
   function drawWinner() {
-    $(winner.id).css("top", BOARD_HEIGHT / 2 - $("#winner").height() / 2);
-    $(winner.id).css("left", BOARD_WIDTH / 2 - $("#winner").width() / 2);
+    $(winner).show();
   }
 
   function drawPlayAgainButton() {
     $("#playAgain").text("PLAY AGAIN");
-    $("#playAgain").css("top", BOARD_HEIGHT - $("#playAgain").height());
-    $("#playAgain").css("left", BOARD_WIDTH / 2 - $("#playAgain").width() / 2);
     $("#playAgain").show();
   }
   
@@ -238,13 +235,13 @@ $(document).ready(function() {
   function handleWinner() {
     if (scorePL === 11) {
       endGame();
-      $(winner.id).text(paddleLeftWins);
+      $(winner).text(paddleLeftWins);
       drawWinner();
       drawPlayAgainButton();
     }
     else if (scorePR === 11) {
       endGame();
-      $(winner.id).text(paddleRightWins);
+      $(winner).text(paddleRightWins);
       drawWinner();
       drawPlayAgainButton();
     }
@@ -254,9 +251,11 @@ $(document).ready(function() {
   function handlePoints() {
     if (ball.x > BOARD_WIDTH - ball.w) {
       scorePL++;
+      reset();
     }
     if (ball.x < 0) {
       scorePR++;
+      reset();
     }
   }
 
@@ -264,18 +263,16 @@ $(document).ready(function() {
     if (ball.x > BOARD_WIDTH - ball.w) {
       mySound = new sound("audio_left_right_wall.wav");
       mySound.play();
-      reset();
     }
     if (ball.x < 0) {
       mySound = new sound("audio_left_right_wall.wav");
       mySound.play();
-      reset();
     }
   }
 
   function reset() {
 
-    if (scorePL !== 11 || scorePR !== 11) {
+    if (scorePL !== 11 && scorePR !== 11) {
         paddleLeft = GameItem(20, 200, 0, 0, "#paddleLeft");
         paddleRight = GameItem(BOARD_WIDTH - 20 - $('#paddleRight').width(), 200, 0, 0, "#paddleRight");
         ball = GameItem(BOARD_WIDTH / 2, BOARD_HEIGHT / 2, (Math.random() > 0.5 ? -3 : 3), (Math.random() > 0.5 ? -3 : 3), "#ball");
