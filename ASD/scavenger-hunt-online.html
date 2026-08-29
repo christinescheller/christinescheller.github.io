@@ -386,8 +386,8 @@
 
         if (!accessGranted) {
           const expected = "grace hopper";
-          const normVal = val.trim().toLowerCase().replace(/\s+/g, ' ');
-          if (normVal === expected) {
+          const normVal = val.trim().toLowerCase().replace(/\s+/g, '');
+          if (normVal === expected.replace(/\s+/g, '')) {
             if (errorTimeoutId) {
               clearTimeout(errorTimeoutId);
               errorTimeoutId = null;

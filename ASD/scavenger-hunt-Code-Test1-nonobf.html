@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -122,8 +123,6 @@
     #correctMessage.show {
       opacity: 1;
     }
-
-
   </style>
 </head>
 <body>
@@ -152,6 +151,75 @@
   </div>
   <div id="correctMessage">Correct</div>
 
+  <!-- Puzzle screen (hidden by default) -->
+  <div id="puzzleScreen" style="display:none; margin-top: 40px; text-align: center;">
+    <h2>Access Code Puzzle</h2>
+
+    <div id="puzzleLayout" style="display: flex; justify-content: center; align-items: flex-start; gap: 40px; flex-wrap: wrap;">
+
+      <!-- Puzzle Inputs -->
+      <div id="puzzleInputs" style="display: flex; flex-direction: column; align-items: center;">
+        <div id="topRow" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+          <!-- Top row -->
+          <script>
+            for (let i = 1; i <= 5; i++) {
+              document.write(`
+                <div style="display: flex; flex-direction: column; align-items: center; width: 50px;">
+                  <div style="color:#0f0; margin-bottom: 5px;">${i}</div>
+                  <input class="letter-input" maxlength="1" style="width: 40px; text-align: center;" placeholder="A" />
+                </div>
+              `);
+            }
+          </script>
+        </div>
+
+        <div id="bottomRow" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+          <!-- Bottom row -->
+          <script>
+            for (let i = 6; i <= 11; i++) {
+              document.write(`
+                <div style="display: flex; flex-direction: column; align-items: center; width: 50px;">
+                  <div style="color:#0f0; margin-bottom: 5px;">${i}</div>
+                  <input class="letter-input" maxlength="1" style="width: 40px; text-align: center;" placeholder="A" />
+                </div>
+              `);
+            }
+          </script>
+        </div>
+
+        <div style="text-align: center; margin-bottom: 20px;">
+          <button class="green-button" onclick="showCypher()">Toggle Cypher</button>
+          <button class="green-button" onclick="toggleView('portal')">← Back to Access Portal</button>
+        </div>
+      </div>
+
+      <!-- Cypher Key (Hidden by default, appears on right) -->
+      <div id="cypherModal" style="display: none; background:#000; color:#0f0; border:2px solid #0f0; padding:20px; width:220px; text-align: center;">
+        <h3>Cypher Key</h3>
+        <p>A = 1, B = 2, ..., Z = 26</p>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;">
+          <script>
+            document.write([...Array(26)].map((_, i) => `<div>${String.fromCharCode(65+i)} = ${i+1}</div>`).join(''));
+          </script>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Image Viewer Section -->
+    <div id="imageViewer" style="margin-top: 30px; display: flex; flex-direction: column; align-items: center;">
+      <img id="puzzleImage" src="" alt="Puzzle Slide" style="max-width: 100%; height: auto; border: 2px solid #0f0; display: none; max-height: 400px;" />
+      <div style="margin-top: 10px;">
+        <button class="green-button" onclick="prevImage()">← Back</button>
+        <button class="green-button" onclick="nextImage()">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nav to puzzle -->
+  <div id="navButtons" style="text-align:center; margin-top:20px;">
+    <button class="green-button" onclick="toggleView('puzzle')">Go to Puzzle →</button>
+  </div>
 
   <!-- Win effects -->
   <canvas id="confettiCanvas"></canvas>
@@ -207,11 +275,11 @@
         `What does HTML stand for?`,
         `Create an HTML paragraph tag (opening and closing)`,
         `What does CSS stand for?`,
-        `CSS uses which tags?`,
+        `CSS uses which tags? (opening and closing)`,
         `What operator means 'equals exactly' in value and type?`,
         `Which pair of tags is responsible for containing information about an HTML page that will not be visible?`,
         `Which pair of tags is responsible for containing information about an HTML page that will be visible?`,
-        `Which HTML tags are used to create sections of content?`,
+        `Which HTML tags are used to create sections of content? (opening and closing)`,
         `[blank] are unique labels for HTML elements`,
         `You can write a string using both "" and what?`,
         `What data type is -13?`,
@@ -219,8 +287,8 @@
         `What do you call the input data that you provide to a function during a function call?`,
         `If you have a function named "makePizza" that has no parameters, how do you call it in your program?`,
         `How many arguments are in the following function call?\n\naddThemAll(42, 13, 777);`,
-        `This function call is written correctly, true or false? countSheep15;`,
-        `This is the correct way to write a function call: add(5,2);`,
+        `T/F. This function call is written correctly. countSheep15;`,
+        `T/F. This is the correct way to write a function call: add(5,2);`,
         `What is the assignment operator?`,
         `What's this missing:\n\nvar = "Toby";`,
         `What do we use to name variables and functions to ensure they are easier to read?`,
@@ -242,7 +310,7 @@
         "cascading style sheets",
         "<style></style>",
         "===",
-        "<head></head>",
+        "&lt;head&gt;&lt;/head&gt;",
         "&lt;body&gt;&lt;/body&gt;",
         "&lt;div&gt;&lt;/div&gt;",
         "ids",
@@ -277,7 +345,9 @@
 
       // ====== Error UI with sound ======
       let errorTimeoutId = null;
+      let hintShown = false;
       function showErrorMessage(hint = "", duration = 3000) {
+        if (hint) hintShown = true;
         const errorAudio = document.getElementById("tryAgainSound");
         if (errorAudio) {
           errorAudio.currentTime = 0;
@@ -295,6 +365,7 @@
 
       // ====== Answer checker (kept flexible) ======
       function handleAnswer(input) {
+        hintShown = false;
         const raw = input.trim().toLowerCase();
         const correctRaw = answers[currentQuestion];
         const correct = correctRaw.trim().toLowerCase();
@@ -303,16 +374,56 @@
         const tagLike = correct.startsWith("&lt;") && correct.endsWith("&gt;");
         if (tagLike) {
           const literal = correct.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-          const normalizedInput = input.trim().toLowerCase().replace(/\s+/g, "");
-          return (
-            normalizedInput === literal.replace(/\s+/g, "") ||
-            input.trim() === correct
-          );
+          // Case-SENSITIVE correctness: compare original input, not lowercased
+          const inputNoSpace = input.trim().replace(/\s+/g, "");
+          const isCorrect = inputNoSpace === literal.replace(/\s+/g, "");
+
+          // Hint detection stays case-insensitive so <DIV> or "div" still nudges
+          if (!isCorrect) {
+            const lowerInput = inputNoSpace.toLowerCase();
+            // Right syntax but wrong case → casing hint
+            if (lowerInput === literal.replace(/\s+/g, "")) {
+              showErrorMessage("HTML tags should be lowercase.");
+              return false;
+            }
+            const openMatch = literal.match(/<([a-z0-9]+)>/i);
+            const tagName = openMatch ? openMatch[1].toLowerCase() : ""; // e.g. "div"
+            if (tagName && lowerInput.includes(tagName)) {
+              showErrorMessage("Use proper syntax — include BOTH the opening AND closing tags.");
+              return false;
+            }
+          }
+
+          return isCorrect;
+        }
+
+        // <style></style> — plain answer, same opening+closing nudge
+        if (correct === "<style></style>") {
+          // Case-SENSITIVE correctness
+          const inputNoSpace = input.trim().replace(/\s+/g, "");
+          if (inputNoSpace === "<style></style>") return true;
+          const lowerInput = inputNoSpace.toLowerCase();
+          // Right syntax but wrong case → casing hint
+          if (lowerInput === "<style></style>") {
+            showErrorMessage("HTML tags should be lowercase.");
+            return false;
+          }
+          if (lowerInput.includes("style")) {
+            showErrorMessage("Use proper syntax — include BOTH the opening AND closing tags.");
+            return false;
+          }
+          return false;
         }
 
         // Single-line comment vs multi-line
         if (questions[currentQuestion].includes("single-line comment") && raw === "/*") {
           showErrorMessage("That's for multi-line comments. Try the single-line version.");
+          return false;
+        }
+
+        // 'let' offered for the var question — nudge toward the intended keyword
+        if (correct === "var" && raw === "let") {
+          showErrorMessage("let is used, but what keyword is also used?");
           return false;
         }
 
@@ -325,6 +436,50 @@
         // "5" + "5"
         if (questions[currentQuestion].includes('"5" + "5"')) {
           return input.trim() === '"55"';
+        }
+
+        // "How many arguments in addThemAll(42, 13, 777)?" — accept 3 or three
+        if (questions[currentQuestion].includes("addThemAll") && correct === "3") {
+          return raw === "3" || raw === "three";
+        }
+
+        // "How do you call makePizza()?" — hint if they forget the semicolon
+        if (correct === "makepizza();") {
+          const cleaned = input.trim().replace(/\s+/g, "").toLowerCase();
+          if (cleaned === "makepizza();") return true;
+          if (cleaned === "makepizza()") {
+            showErrorMessage("So close! Don't forget the semicolon at the end.");
+            return false;
+          }
+          return false;
+        }
+
+        // "What's this missing: var = "Toby";" — accept name variants
+        if (correct === "name of variable") {
+          const collapsed = raw.replace(/\s+/g, "").replace(/[’']/g, "");
+          return [
+            "nameofvariable",
+            "nameofthevariable",
+            "variablename",
+            "variablesname",
+            "thevariablename",
+            "name",
+            "thename",
+            "varname",
+            "variable"
+          ].includes(collapsed);
+        }
+
+        // "What symbol ends most JavaScript statements?" — accept ; or the word
+        if (correct === ";") {
+          const collapsed = raw.replace(/\s+/g, "");
+          return collapsed === ";" || collapsed === "semicolon" || collapsed === "semi-colon";
+        }
+
+        // "You can write a string using both "" and what?" — accept '', ' ', or "single quote(s)"
+        if (correct === "''") {
+          const collapsed = raw.replace(/\s+/g, "");
+          return collapsed === "''" || raw === "single quote" || raw === "single quotes";
         }
 
         // Accept either 'id' or 'ids'
@@ -366,10 +521,10 @@
         const val = inputBox.value;
 
         if (!accessGranted) {
-          // Gate on access code; do NOT navigate anywhere
-          const expected = "alan turing";
-          const normVal = val.trim().toLowerCase().replace(/\s+/g, ' ');
-          if (normVal === expected) {
+          // Gate on access code (GRACE HOPPER); do NOT navigate anywhere
+          const expected = "grace hopper";
+          const normVal = val.trim().toLowerCase().replace(/\s+/g, '');
+          if (normVal === expected.replace(/\s+/g, '')) {
             if (errorTimeoutId) {
               clearTimeout(errorTimeoutId);
               errorTimeoutId = null;
@@ -378,6 +533,7 @@
             errorHintDiv.textContent = "";
 
             accessGranted = true;
+            document.getElementById('navButtons').style.display = 'none';
             startTime = performance.now(); // start timer
             // Swap header message set
             page = 0;
@@ -461,7 +617,7 @@
         correctMessageDiv.classList.remove("show");
         void correctMessageDiv.offsetWidth; // Force reflow to reset fade-in logic
 
-        showErrorMessage(); // Your existing error handling
+        if (!hintShown) showErrorMessage(); // generic error only if no specific hint fired
       }
 
 
@@ -585,6 +741,60 @@
         confettiCanvas.height = window.innerHeight;
       });
     })();
+
+    // ====== Puzzle screen helpers (outside the IIFE, called by inline onclick) ======
+    function toggleView(view) {
+      document.getElementById('portal').style.display = view === 'portal' ? 'block' : 'none';
+      document.getElementById('puzzleScreen').style.display = view === 'puzzle' ? 'block' : 'none';
+      const nav = document.getElementById('navButtons');
+      nav.style.display = (view === 'puzzle') ? 'none' : 'block';
+      if (view === 'portal') document.getElementById('inputBox').focus();
+    }
+
+    function showCypher() {
+      const modal = document.getElementById('cypherModal');
+      modal.style.display = (modal.style.display === 'block') ? 'none' : 'block';
+    }
+
+    const imagePaths = [
+      '../projects/sh-assets/puzzle_1.jpg',
+      '../projects/sh-assets/puzzle_2.jpg',
+      '../projects/sh-assets/puzzle_3.jpg',
+      '../projects/sh-assets/puzzle_4.jpg',
+      '../projects/sh-assets/puzzle_5.jpg',
+      '../projects/sh-assets/puzzle_6.jpg',
+      '../projects/sh-assets/puzzle_7.jpg',
+      '../projects/sh-assets/puzzle_8.jpg'
+    ];
+
+    let currentImageIndex = 0;
+
+    function showImage(index) {
+      const img = document.getElementById('puzzleImage');
+      if (index >= 0 && index < imagePaths.length) {
+        img.src = imagePaths[index];
+        img.style.display = 'block';
+      }
+    }
+
+    function nextImage() {
+      if (currentImageIndex < imagePaths.length - 1) {
+        currentImageIndex++;
+        showImage(currentImageIndex);
+      }
+    }
+
+    function prevImage() {
+      if (currentImageIndex > 0) {
+        currentImageIndex--;
+        showImage(currentImageIndex);
+      }
+    }
+
+    // Show first image on load
+    document.addEventListener('DOMContentLoaded', () => {
+      showImage(currentImageIndex);
+    });
   </script>
 </body>
 </html>
